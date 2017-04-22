@@ -3,13 +3,14 @@ package db
 import (
 	//"database/sql"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"log"
 )
 
-var db *sqlx.DB
+var Db *sqlx.DB
 
 var schema = `
-CREATE EXTENSION "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -19,7 +20,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-CREATE TABLE teams (
+CREATE TABLE IF NOT EXISTS teams (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
   name text,
   created_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,9 +28,11 @@ CREATE TABLE teams (
   CONSTRAINT teams_pkey PRIMARY KEY (id)
 );
 
+DROP TRIGGER IF EXISTS update_teams_updated_at ON teams;
+
 CREATE TRIGGER update_teams_updated_at BEFORE UPDATE ON teams FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
-CREATE TABLE players (
+CREATE TABLE IF NOT EXISTS players (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
   name text,
   jersey_number integer,
@@ -40,28 +43,15 @@ CREATE TABLE players (
   CONSTRAINT players_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX index_players_on_team_id
+CREATE INDEX IF NOT EXISTS index_players_on_team_id
   ON players USING btree
   (team_id);
 
+DROP TRIGGER IF EXISTS update_players_updated_at ON players;
+
 CREATE TRIGGER update_players_updated_at BEFORE UPDATE ON players FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
-CREATE TABLE teams_players (
-  id uuid NOT NULL DEFAULT uuid_generate_v4(),
-  team_id uuid NOT NULL,
-  player_id uuid NOT NULL,
-  CONSTRAINT teams_players_pkey PRIMARY KEY (id)
-);
-
-CREATE INDEX index_teams_players_on_team_id
-  ON teams_players USING btree
-  (team_id);
-
-CREATE INDEX index_teams_players_on_player_id
-  ON teams_players USING btree
-  (player_id);
-
-CREATE TABLE games (
+CREATE TABLE IF NOT EXISTS games (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
   start_at timestamp without time zone,
   home_team_id uuid,
@@ -73,17 +63,19 @@ CREATE TABLE games (
   CONSTRAINT games_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX index_games_on_home_team_id
+CREATE INDEX IF NOT EXISTS index_games_on_home_team_id
   ON games USING btree
   (home_team_id);
 
-CREATE INDEX index_games_on_away_team_id
+CREATE INDEX IF NOT EXISTS index_games_on_away_team_id
   ON games USING btree
   (away_team_id);
 
+DROP TRIGGER IF EXISTS update_games_updated_at ON games;
+
 CREATE TRIGGER update_games_updated_at BEFORE UPDATE ON games FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
-CREATE TABLE shots (
+CREATE TABLE IF NOT EXISTS shots (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
   player_id uuid,
   game_id uuid,
@@ -96,29 +88,34 @@ CREATE TABLE shots (
   CONSTRAINT shots_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX index_shots_on_player_id
+CREATE INDEX IF NOT EXISTS index_shots_on_player_id
   ON shots USING btree
   (player_id);
 
-CREATE INDEX index_shots_on_game_id
+CREATE INDEX IF NOT EXISTS index_shots_on_game_id
   ON shots USING btree
   (game_id);
+
+DROP TRIGGER IF EXISTS update_shots_updated_at ON shots;
 
 CREATE TRIGGER update_shots_updated_at BEFORE UPDATE ON shots FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 `
 
-func Init() {
-	db, err := sqlx.Open("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
+func SchemaSetup() {
+	db, err := sqlx.Connect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	db.MustExec(schema)
+}
+
+func init() {
+	Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
 
 	// set to reasonable values for production
-	db.SetMaxIdleConns(4)
-	db.SetMaxOpenConns(16)
+	Db.SetMaxIdleConns(4)
+	Db.SetMaxOpenConns(16)
 
-	// err = db.Ping()
 }
