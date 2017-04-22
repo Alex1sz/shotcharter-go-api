@@ -1,7 +1,6 @@
 package db
 
 import (
-	//"database/sql"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
@@ -114,8 +113,7 @@ func SchemaSetup() {
 func init() {
 	Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
 
-	// set to reasonable values for production
+	// check values before deploying production
 	Db.SetMaxIdleConns(4)
 	Db.SetMaxOpenConns(16)
-
 }
