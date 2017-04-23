@@ -12,6 +12,8 @@ type Game struct {
 	AwayTeam  *Team
 	HomeScore uint8
 	AwayScore uint8
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 func (game *Game) Create() (err error) {

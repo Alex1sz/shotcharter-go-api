@@ -13,9 +13,11 @@ type Player struct {
 	JerseyNumber uint8  `db:"jersey_number"`
 	Team         *Team
 	Shots        []Shot
+	CreatedAt    string `db:"created_at"`
+	UpdatedAt    string `db:"updated_at"`
 }
 
-func (player *Player) Create() (err error) {
+func (player *Player) Create() (p Player, err error) {
 	if player.Team == nil {
 		err = errors.New("Team not found")
 		return

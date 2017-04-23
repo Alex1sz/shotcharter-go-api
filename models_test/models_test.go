@@ -10,7 +10,6 @@ import (
 func createTestTeam() (team models.Team) {
 	team = models.Team{Name: "Test team..."}
 	team.Create()
-
 	return team
 }
 
