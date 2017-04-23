@@ -6,37 +6,44 @@ import (
 	"testing"
 )
 
-func TestTeamCreate(t *testing.T) {
-	var team = models.Team{Name: "Test team..."}
+// Create test team for usage in tests
+func createTestTeam() (team models.Team) {
+	team = models.Team{Name: "Test team..."}
 	team.Create()
 
-	after_teams := []models.Team{}
-	db.Db.Select(&after_teams, "SELECT * FROM teams")
+	return team
+}
 
-	if len(after_teams) > 0 {
+func TestTeamCreate(t *testing.T) {
+	sql := "SELECT COUNT(*) from teams"
+	var pre_create_count, after_create_count int
+
+	db.Db.Get(pre_create_count, sql)
+
+	createTestTeam()
+
+	db.Db.Get(after_create_count, sql)
+
+	if after_create_count > pre_create_count {
 		t.Error("Team count not incremented by 1")
 	}
 }
 
 func TestPlayerCreate(t *testing.T) {
-	team := models.Team{}
-	err := db.Db.QueryRow("SELECT id, name FROM teams").Scan(&team.ID, &team.Name)
+	var pre_create_count, after_create_count int
+	sql := "SELECT COUNT(*) FROM players"
 
-	if err != nil {
-		t.Error("Team not found...")
-	}
-	sql := "SELECT * FROM players"
+	db.Db.Get(pre_create_count, sql)
 
-	pre_create := []models.Player{}
-	db.Db.Select(&pre_create, sql)
+	// create team to associate to player
+	team := createTestTeam()
 
 	player := models.Player{Name: "Alejandro Alejandro", Active: true, JerseyNumber: 24, Team: &team}
 	player.Create()
 
-	after_create := []models.Player{}
-	db.Db.Select(&after_create, sql)
+	db.Db.Get(after_create_count, sql)
 
-	if len(after_create) != len(pre_create)+1 {
+	if after_create_count > pre_create_count {
 		t.Error("Player create failed! Count not incremented.")
 	}
 }
