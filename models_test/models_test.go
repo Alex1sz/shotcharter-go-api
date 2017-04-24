@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Create test count based test helper
+// count based test setup helper used by Create() tests
 func setupBeforeAndAfterCounts(table string) (pre_create_count int, after_create_count int, sql_query string) {
 	sql_query = "SELECT COUNT(*) from " + table
 	db.Db.Get(&pre_create_count, sql_query)
@@ -77,5 +77,39 @@ func TestGameCreate(t *testing.T) {
 
 	if after_create_count > pre_create_count {
 		t.Error("Game create failed!")
+	}
+}
+
+// helper method creates test player w/ team
+func createTestPlayer() (player models.Player) {
+	team := createTestTeam()
+
+	player = models.Player{Name: "Some player name", Active: true, JerseyNumber: 23, Team: &team}
+	player.Create()
+
+	return player
+}
+
+// helper method creates game w/ away team
+func createTestGameForHomeTeam(homeTeam *models.Team) (game models.Game) {
+	away_team := createTestTeam()
+	game = models.Game{HomeTeam: homeTeam, AwayTeam: &away_team}
+
+	return game
+}
+
+func TestShotCreate(t *testing.T) {
+	var pre_create_count, after_create_count, sql = setupBeforeAndAfterCounts("shots")
+
+	player := createTestPlayer()
+	game := createTestGameForHomeTeam(player.Team)
+
+	shot := models.Shot{Player: &player, Game: &game, PtValue: 3, Made: true, XAxis: 312, YAxis: 250}
+	shot.Create()
+
+	db.Db.Get(after_create_count, sql)
+
+	if after_create_count > pre_create_count {
+		t.Error("Shot not created!")
 	}
 }
