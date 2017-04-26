@@ -4,6 +4,7 @@ import (
 	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
+	"log"
 	"testing"
 )
 
@@ -66,24 +67,6 @@ func TestGameCreate(t *testing.T) {
 	}
 }
 
-// helper method creates test player w/ team
-// func createTestPlayer() (player models.Player) {
-// 	team := createTestTeam()
-//
-// 	player = models.Player{Name: "Some player name", Active: true, JerseyNumber: 23, Team: &team}
-// 	player.Create()
-//
-// 	return player
-// }
-
-// helper method creates game w/ away team
-// func createTestGameForHomeTeam(homeTeam *models.Team) (game models.Game) {
-// 	away_team := createTestTeam()
-// 	game = models.Game{HomeTeam: homeTeam, AwayTeam: &away_team}
-//
-// 	return game
-// }
-
 func TestShotCreate(t *testing.T) {
 	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("shots")
 
@@ -97,5 +80,18 @@ func TestShotCreate(t *testing.T) {
 
 	if after_create_count > pre_create_count {
 		t.Error("Shot not created!")
+	}
+}
+
+func TestFindTeamByID(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+
+	returnedTeam, err := models.FindTeamByID(team.ID)
+
+	log.Print(returnedTeam)
+
+	if err != nil {
+		log.Println(err)
+		t.Error("FindTeamByID fails to return team!")
 	}
 }
