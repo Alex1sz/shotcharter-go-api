@@ -33,7 +33,7 @@ func FindTeamByID(id string) (team Team, err error) {
 
 	players := []Player{}
 
-	rows, err := db.Db.Queryx("select id, name, active, jersey_number from players where team_id = $1", id)
+	rows, err := db.Db.Queryx("select id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", id)
 
 	if err != nil {
 		log.Println(err)
@@ -42,7 +42,7 @@ func FindTeamByID(id string) (team Team, err error) {
 
 	for rows.Next() {
 		player := Player{Team: &team}
-		err = rows.Scan(&player.ID, &player.Name, &player.Active, &player.JerseyNumber)
+		err = rows.Scan(&player.ID, &player.Name, &player.Active, &player.JerseyNumber, &player.CreatedAt, &player.UpdatedAt)
 
 		if err != nil {
 			log.Println(err)
