@@ -92,6 +92,18 @@ func TestFindTeamByID(t *testing.T) {
 
 	if err != nil {
 		log.Println(err)
-		t.Error("FindTeamByID fails to return team!")
+		t.Error("FindTeamByID failed to return team!")
+	}
+}
+
+func TestGameFindByID(t *testing.T) {
+	game := test_helper.CreateTestGame()
+
+	var returnedGame, err = models.FindGameByID(game.ID)
+
+	if len(returnedGame.ID) < 1 {
+		log.Println("FindGameByID returns game but also returns err")
+		log.Println(err)
+		t.Error("FindGameByID failed to return valid game")
 	}
 }
