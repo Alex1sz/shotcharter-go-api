@@ -1,7 +1,7 @@
 package main
 
 import (
-	// /"github.com/alex1sz/shotcharter-go/db"
+	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/routers"
 	"log"
 	"net/http"
@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	db.Db.Ping()
 	router := routers.InitRoutes()
 
 	server := &http.Server{
