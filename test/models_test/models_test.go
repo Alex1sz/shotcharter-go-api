@@ -88,8 +88,6 @@ func TestFindTeamByID(t *testing.T) {
 
 	returnedTeam, err := models.FindTeamByID(team.ID)
 
-	log.Print(returnedTeam)
-
 	if err != nil {
 		log.Println(err)
 		t.Error("FindTeamByID failed to return team!")
