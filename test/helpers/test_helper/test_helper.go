@@ -4,6 +4,7 @@ import (
 	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
+	// /"log"
 )
 
 // count based test setup helper used by Create() tests
@@ -35,6 +36,27 @@ func CreateTestPlayer() (player models.Player) {
 func CreateTestGameForHomeTeam(homeTeam *models.Team) (game models.Game) {
 	away_team := CreateTestTeam()
 	game = models.Game{HomeTeam: homeTeam, AwayTeam: &away_team}
+	game.Create()
+
+	return game
+}
+
+// create player associate to test team
+func CreateTestPlayerForTeam(team *models.Team) {
+	player := models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: team}
+	player.Create()
+	return
+}
+
+// helper creates a game w/ HomeTeam & AwayTeam
+func CreateTestGame() (game models.Game) {
+	awayTeam, homeTeam := CreateTestTeam(), CreateTestTeam()
+
+	CreateTestPlayerForTeam(&awayTeam)
+	CreateTestPlayerForTeam(&homeTeam)
+
+	game = models.Game{HomeTeam: &homeTeam, AwayTeam: &awayTeam}
+	game.Create()
 
 	return game
 }
