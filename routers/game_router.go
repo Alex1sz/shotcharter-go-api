@@ -11,5 +11,5 @@ func SetGameRoutes(router *mux.Router) *mux.Router {
 
 	subRouter.HandleFunc("/{id}", controllers.GetGameByID).Methods("GET")
 
-	return router
+	return gameRouter
 }
