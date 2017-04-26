@@ -5,15 +5,15 @@ import (
 )
 
 type Shot struct {
-	ID        string `db:"id"`
-	Player    *Player
-	Game      *Game
-	PtValue   uint8  `db:"pt_value"`
-	Made      bool   `db:"made"`
-	XAxis     int    `db:"x_axis"`
-	YAxis     int    `db:"y_axis"`
-	CreatedAt string `db:"created_at"`
-	UpdatedAt string `db:"updated_at"`
+	ID        string  `db:"id" json:"id"`
+	Player    *Player `json:"player,omitempty"`
+	Game      *Game   `json:"game,omitempty"`
+	PtValue   uint8   `db:"pt_value" json:"pt_value"`
+	Made      bool    `db:"made" json:"made"`
+	XAxis     int     `db:"x_axis" json:"x_axis"`
+	YAxis     int     `db:"y_axis" json:"y_axis"`
+	CreatedAt string  `db:"created_at" json:"created_at"`
+	UpdatedAt string  `db:"updated_at" json:"updated_at"`
 }
 
 func (shot *Shot) Create() (err error) {

@@ -7,14 +7,14 @@ import (
 )
 
 type Player struct {
-	ID           string `db:"id"`
-	Name         string `db:"name"`
-	Active       bool   `db:"active"`
-	JerseyNumber uint8  `db:"jersey_number"`
-	Team         *Team
-	Shots        []Shot
-	CreatedAt    string `db:"created_at"`
-	UpdatedAt    string `db:"updated_at"`
+	ID           string `db:"id" json:"id"`
+	Name         string `db:"name" json:"name"`
+	Active       bool   `db:"active" json:"active,omitempty"`
+	JerseyNumber uint8  `db:"jersey_number" json:"jesey_number,omitempty"`
+	Team         *Team  `json:"team,omitempty"`
+	Shots        []Shot `json:"shots,omitempty"`
+	CreatedAt    string `db:"created_at" json:"created_at"`
+	UpdatedAt    string `db:"updated_at" json:"updated_at"`
 }
 
 func (player *Player) Create() (p Player, err error) {

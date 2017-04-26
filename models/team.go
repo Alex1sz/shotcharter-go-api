@@ -6,9 +6,11 @@ import (
 )
 
 type Team struct {
-	ID      string `db:"id"`
-	Name    string `db:"name"`
-	Players []Player
+	ID        string   `db:"id" json:"id"`
+	Name      string   `db:"name" json:"name"`
+	CreatedAt string   `db:"created_at" json:"created_at"`
+	UpdatedAt string   `db:"updated_at" json:"updated_at"`
+	Players   []Player `json:"players,omitempty"`
 }
 
 func (team *Team) Create() (err error) {
@@ -16,20 +18,25 @@ func (team *Team) Create() (err error) {
 
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	return
 }
 
-func FindTeamById(id string) (team Team, err error) {
-	team = Team{}
+func FindTeamByID(id string) (team Team, err error) {
+	err = db.Db.Get(&team, "select id, name from teams where id = $1", id)
 
-	err = db.Db.QueryRowx("select id, name from teams where id = $1", id).Scan(&team.ID, &team.Name)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-	team.Players = []Player{}
+	players := []Player{}
 
 	rows, err := db.Db.Queryx("select id, name, active, jersey_number from players where team_id = $1", id)
 
 	if err != nil {
+		log.Println(err)
 		return
 	}
 
@@ -38,10 +45,12 @@ func FindTeamById(id string) (team Team, err error) {
 		err = rows.Scan(&player.ID, &player.Name, &player.Active, &player.JerseyNumber)
 
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			return
 		}
-		team.Players = append(team.Players, player)
+		players = append(players, player)
 	}
 	rows.Close()
-	return
+
+	return team, err
 }
