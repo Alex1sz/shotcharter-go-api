@@ -7,10 +7,9 @@ import (
 
 func SetTeamRoutes(router *mux.Router) *mux.Router {
 	teamRouter := mux.NewRouter()
-	subRouter := teamRouter.PathPrefix("/teams").Subrouter()
-	subRouter.HandleFunc("/", controllers.CreateTeam).Methods("POST")
 
-	subRouter.HandleFunc("/{id}", controllers.GetTeamByID).Methods("GET")
+	teamRouter.HandleFunc("/teams", controllers.CreateTeam).Methods("POST")
+	teamRouter.HandleFunc("/teams/{id}", controllers.GetTeamByID).Methods("GET")
 
 	return teamRouter
 }

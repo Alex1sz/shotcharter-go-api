@@ -7,9 +7,7 @@ import (
 
 func SetGameRoutes(router *mux.Router) *mux.Router {
 	gameRouter := mux.NewRouter()
-	subRouter := gameRouter.PathPrefix("/games").Subrouter()
-
-	subRouter.HandleFunc("/{id}", controllers.GetGameByID).Methods("GET")
+	gameRouter.HandleFunc("/games/{id}", controllers.GetGameByID).Methods("GET")
 
 	return gameRouter
 }

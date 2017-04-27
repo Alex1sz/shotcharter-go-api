@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
-	"log"
+	//"log"
 	"net/http"
 
 	"github.com/alex1sz/shotcharter-go/models"
@@ -13,13 +13,7 @@ import (
 // GET /games/:id
 func GetGameByID(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
-	log.Println("Get /games/" + params["id"])
-
-	game := models.Game{}
-	models.FindGameByID(params["id"])
-
-	log.Println(game)
-	log.Print(game)
+	game, err := models.FindGameByID(params["ID"])
 
 	jsonResp, err := json.Marshal(game)
 
