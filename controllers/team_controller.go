@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
-	// /"log"
+	"log"
 	"net/http"
 
 	"github.com/alex1sz/shotcharter-go/models"
@@ -19,7 +19,6 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "Invalid team data", 500)
 		return
 	}
-
 	team.Create()
 
 	jsonResp, err := json.Marshal(team)
@@ -27,7 +26,6 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	w.Write(jsonResp)
@@ -35,11 +33,11 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 
 // GET /teams/:id
 func GetTeamByID(w http.ResponseWriter, req *http.Request) {
+	log.Println("GET request /teams/:id")
 	params := mux.Vars(req)
-
 	team, err := models.FindTeamByID(params["id"])
 
-	jsonResp, err := json.Marshal(&team)
+	jsonResp, err := json.Marshal(team)
 
 	if err != nil {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
@@ -49,6 +47,4 @@ func GetTeamByID(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResp)
-
-	// json.NewEncoder(w).Encode(team)
 }
