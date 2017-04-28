@@ -33,17 +33,17 @@ func CreateTestPlayer() (player models.Player) {
 }
 
 // helper method creates game w/ away team
-func CreateTestGameForHomeTeam(homeTeam *models.Team) (game models.Game) {
+func CreateTestGameForHomeTeam(homeTeam models.Team) (game models.Game) {
 	away_team := CreateTestTeam()
-	game = models.Game{HomeTeam: homeTeam, AwayTeam: &away_team}
+	game = models.Game{HomeTeam: homeTeam, AwayTeam: away_team}
 	game.Create()
 
 	return game
 }
 
 // create player associate to test team
-func CreateTestPlayerForTeam(team *models.Team) {
-	player := models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: team}
+func CreateTestPlayerForTeam(team models.Team) {
+	player := models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: &team}
 	player.Create()
 	return
 }
@@ -52,10 +52,10 @@ func CreateTestPlayerForTeam(team *models.Team) {
 func CreateTestGame() (game models.Game) {
 	awayTeam, homeTeam := CreateTestTeam(), CreateTestTeam()
 
-	CreateTestPlayerForTeam(&awayTeam)
-	CreateTestPlayerForTeam(&homeTeam)
+	CreateTestPlayerForTeam(awayTeam)
+	CreateTestPlayerForTeam(homeTeam)
 
-	game = models.Game{HomeTeam: &homeTeam, AwayTeam: &awayTeam}
+	game = models.Game{HomeTeam: homeTeam, AwayTeam: awayTeam}
 	game.Create()
 
 	return game

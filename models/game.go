@@ -15,8 +15,8 @@ type Game struct {
 	AwayScore uint64         `db:"away_score" json:"away_score"`
 	CreatedAt string         `db:"created_at" json:"created_at"`
 	UpdatedAt string         `db:"updated_at" json:"updated_at"`
-	HomeTeam  *Team          `db:"home_team_id" json:"home_team"`
-	AwayTeam  *Team          `db:"away_team_id" json:"away_team"`
+	HomeTeam  Team           `db:"home_team_id" json:"home_team"`
+	AwayTeam  Team           `db:"away_team_id" json:"away_team"`
 }
 
 func (game *Game) Create() (err error) {
@@ -38,12 +38,10 @@ func FindGameByID(id string) (game Game, err error) {
 		log.Println(err)
 		return
 	}
-	teams := []Team{}
+	var teams = []Team{}
 	db.Db.Select(teams, "SELECT * from teams where id in ($1, $2)", game.HomeTeam.ID, game.AwayTeam.ID)
 
-	var homeTeam, awayTeam Team = teams[0], teams[1]
-	game.HomeTeam = &homeTeam
-	game.AwayTeam = &awayTeam
+	game.HomeTeam, game.AwayTeam = teams[0], teams[1]
 
 	return game, err
 }

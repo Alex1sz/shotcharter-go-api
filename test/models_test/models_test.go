@@ -57,7 +57,7 @@ func TestGameCreate(t *testing.T) {
 	home_team := test_helper.CreateTestTeam()
 	away_team := test_helper.CreateTestTeam()
 
-	game := models.Game{HomeTeam: &home_team, AwayTeam: &away_team}
+	game := models.Game{HomeTeam: home_team, AwayTeam: away_team}
 	game.Create()
 
 	db.Db.Get(after_create_count, sql)
@@ -71,7 +71,7 @@ func TestShotCreate(t *testing.T) {
 	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("shots")
 
 	player := test_helper.CreateTestPlayer()
-	game := test_helper.CreateTestGameForHomeTeam(player.Team)
+	game := test_helper.CreateTestGameForHomeTeam(*player.Team)
 
 	shot := models.Shot{Player: &player, Game: &game, PtValue: 3, Made: true, XAxis: 312, YAxis: 250}
 	shot.Create()
@@ -85,7 +85,7 @@ func TestShotCreate(t *testing.T) {
 
 func TestFindTeamByID(t *testing.T) {
 	team := test_helper.CreateTestTeam()
-	test_helper.CreateTestPlayerForTeam(&team)
+	test_helper.CreateTestPlayerForTeam(team)
 
 	returnedTeam, err := models.FindTeamByID(team.ID)
 
