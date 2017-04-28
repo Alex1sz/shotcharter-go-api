@@ -17,16 +17,12 @@ func TestSetupBeforeAndAfterCountsHelper(t *testing.T) {
 
 	if pre_create_count < 1 {
 		t.Error("No games created!")
-	}
-
-	if sql != "SELECT COUNT(*) from games" {
-		t.Error("setupCountVariables failed wrong sql query")
+		log.Println(sql)
 	}
 }
 
 func TestTeamCreate(t *testing.T) {
 	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("teams")
-
 	test_helper.CreateTestTeam()
 
 	db.Db.Get(after_create_count, sql)
