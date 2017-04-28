@@ -10,7 +10,7 @@ type Team struct {
 	Name      string `db:"name" json:"name"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
-	Players   []Player
+	Players   []*Player
 	Games     []Game
 }
 
@@ -24,6 +24,14 @@ func (team *Team) Create() (err error) {
 	return
 }
 
+func (team *Team) GetPlayers() {
+	players := []*Player{}
+	db.Db.Select(&players, "SELECT id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", &team.ID)
+
+	team.Players = players
+	return
+}
+
 func FindTeamByID(id string) (team Team, err error) {
 	err = db.Db.Get(&team, "select id, name from teams where id = $1", id)
 
@@ -31,10 +39,7 @@ func FindTeamByID(id string) (team Team, err error) {
 		log.Println(err)
 		return
 	}
-	var players = []Player{}
-	db.Db.Select(&players, "SELECT id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", team.ID)
-
-	team.Players = players
+	team.GetPlayers()
 
 	return
 }

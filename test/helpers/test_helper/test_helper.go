@@ -26,7 +26,7 @@ func CreateTestTeam() (team models.Team) {
 func CreateTestPlayer() (player models.Player) {
 	team := CreateTestTeam()
 
-	player = models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: &team}
+	player = models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: team}
 	player.Create()
 
 	return player
@@ -43,7 +43,7 @@ func CreateTestGameForHomeTeam(homeTeam models.Team) (game models.Game) {
 
 // create player associate to test team
 func CreateTestPlayerForTeam(team models.Team) {
-	player := models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: &team}
+	player := models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: team}
 	player.Create()
 	return
 }

@@ -11,14 +11,14 @@ type Player struct {
 	Name         string `db:"name" json:"name"`
 	Active       bool   `db:"active" json:"active,omitempty"`
 	JerseyNumber int64  `db:"jersey_number" json:"jersey_number"`
-	Team         *Team  `db:"team_id" json:"team_id"`
-	Shots        []Shot `db:"shots" json:"shots,omitempty"`
-	CreatedAt    string `db:"created_at" json:"created_at"`
-	UpdatedAt    string `db:"updated_at" json:"updated_at"`
+	Team         Team   `db:"team_id" json:"-"`
+	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
+	CreatedAt string `db:"created_at" json:"created_at"`
+	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
 
 func (player *Player) Create() (p Player, err error) {
-	if player.Team == nil {
+	if &player.Team == nil {
 		err = errors.New("Team not found")
 		return
 	}
