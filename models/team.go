@@ -6,11 +6,12 @@ import (
 )
 
 type Team struct {
-	ID        string   `db:"id" json:"id"`
-	Name      string   `db:"name" json:"name"`
-	CreatedAt string   `db:"created_at" json:"created_at"`
-	UpdatedAt string   `db:"updated_at" json:"updated_at"`
-	Players   []Player `json:"players,omitempty"`
+	ID        string    `db:"id" json:"id"`
+	Name      string    `db:"name" json:"name"`
+	CreatedAt string    `db:"created_at" json:"created_at"`
+	UpdatedAt string    `db:"updated_at" json:"updated_at"`
+	Players   []*Player `db:""`
+	Games     []*Game   `db:""`
 }
 
 func (team *Team) Create() (err error) {
@@ -23,17 +24,10 @@ func (team *Team) Create() (err error) {
 	return
 }
 
-func FindTeamByID(id string) (team Team, err error) {
-	err = db.Db.Get(&team, "select id, name from teams where id = $1", id)
+func GetTeamPlayers(team Team) (Players []*Player) {
+	team.Players = []*Player{}
 
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	players := []Player{}
-
-	rows, err := db.Db.Queryx("select id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", id)
+	rows, err := db.Db.Queryx("select id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", team.ID)
 
 	if err != nil {
 		log.Println(err)
@@ -48,9 +42,20 @@ func FindTeamByID(id string) (team Team, err error) {
 			log.Println(err)
 			return
 		}
-		players = append(players, player)
+		team.Players = append(team.Players, &player)
 	}
 	rows.Close()
+	return
+}
 
-	return team, err
+func FindTeamByID(id string) (team Team, err error) {
+	err = db.Db.Get(&team, "select id, name from teams where id = $1", id)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	team.Players = GetTeamPlayers(team)
+
+	return
 }
