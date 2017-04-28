@@ -6,9 +6,9 @@ import (
 
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
-
-	router = SetTeamRoutes(router)
-	router = SetGameRoutes(router)
+	SetTeamRoutes(router)
+	SetGameRoutes(router)
+	SetPlayerRoutes(router)
 
 	return router
 }
