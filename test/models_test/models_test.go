@@ -85,6 +85,7 @@ func TestShotCreate(t *testing.T) {
 
 func TestFindTeamByID(t *testing.T) {
 	team := test_helper.CreateTestTeam()
+	test_helper.CreateTestPlayerForTeam(&team)
 
 	returnedTeam, err := models.FindTeamByID(team.ID)
 
@@ -92,41 +93,32 @@ func TestFindTeamByID(t *testing.T) {
 		t.Error("FindTeamByID failed to return team")
 	}
 
+	if len(returnedTeam.Players) < 1 {
+		t.Error("FindTeamByID failed to return players")
+	}
+
 	if err != nil {
 		t.Error("FindTeamByID returns err!")
 	}
 }
 
-func TestGameFindByIDReturnsGame(t *testing.T) {
+func TestGameFindByID(t *testing.T) {
 	game := test_helper.CreateTestGame()
-
 	var returnedGame, err = models.FindGameByID(game.ID)
 
 	if len(returnedGame.ID) < 1 {
 		t.Error("FindGameByID failed to return valid game")
 	}
 
-	if err != nil {
-		log.Println(err)
-		t.Error("FindGameByID returns err along with game")
-	}
-}
-
-func TestGameFindByIDReturnsGameWithAssociatedTeams(t *testing.T) {
-	game := test_helper.CreateTestGame()
-
-	if len(game.HomeTeam.ID) < 1 {
-		t.Error("CreateTestGame helper failed ")
-	}
-	var returnedGame, err = models.FindGameByID(game.ID)
-
 	if returnedGame.HomeTeam.ID != game.HomeTeam.ID {
-		log.Println(returnedGame.HomeTeam.ID)
+		log.Println("returnedGame.HomeTeam.ID:" + returnedGame.HomeTeam.ID)
+		log.Println("game.HomeTeam.ID:" + game.HomeTeam.ID)
 		t.Error("FindGameByID failed!")
 	}
 
 	if err != nil {
-		t.Error(err)
+		log.Println(err)
+		t.Error("FindGameByID returns err along with game")
 	}
 }
 
@@ -140,20 +132,5 @@ func testRetrieveTeams(t *testing.T) {
 
 	if teamA.ID != game.HomeTeam.ID {
 		t.Error("retreiveTeams fails ID's mismatched")
-	}
-}
-
-func testGetTeamPlayers(t *testing.T) {
-	team := test_helper.CreateTestTeam()
-	test_helper.CreateTestPlayerForTeam(&team)
-
-	players := models.GetTeamPlayers(team)
-
-	if len(players) != 1 {
-		t.Error("GetTeamPlayers failed len of returned players is off")
-	}
-
-	if team.Players[0].ID != team.Players[0].ID {
-		t.Error("GetTeamPlayers failed")
 	}
 }
