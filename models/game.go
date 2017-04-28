@@ -24,24 +24,31 @@ func (game *Game) Create() (err error) {
 	return
 }
 
-func RetrieveTeams(homeTeamID string, awayTeamID string) (homeTeam Team, awayTeam Team) {
-	teams := []Team{}
-	db.Db.Select(teams, "SELECT * from teams where id in ($1, $2)", homeTeamID, awayTeamID)
+func (game *Game) GetTeams() {
+	var teams = []Team{}
+	db.Db.Select(&teams, "SELECT id, name from teams where id in ($1, $2)", &game.HomeTeam.ID, &game.AwayTeam.ID)
 
-	return teams[0], teams[1]
+	// map teams slice to hash to ensure HomeTeam, AwayTeam are set via ID's and not order of query return
+	teamsMap := map[string]Team{
+		teams[0].ID: teams[0],
+		teams[1].ID: teams[1],
+	}
+	game.HomeTeam, game.AwayTeam = teamsMap[game.HomeTeam.ID], teamsMap[game.AwayTeam.ID]
+
+	game.HomeTeam.GetPlayers()
+	game.AwayTeam.GetPlayers()
+
+	return
 }
 
 func FindGameByID(id string) (game Game, err error) {
-	err = db.Db.Get(&game, "SELECT * from games where id = $1", id)
+	err = db.Db.Get(&game, "SELECT id, start_at, home_team_id, away_team_id, home_score, away_score, created_at, updated_at from games where id = $1", id)
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	var teams = []Team{}
-	db.Db.Select(teams, "SELECT * from teams where id in ($1, $2)", game.HomeTeam.ID, game.AwayTeam.ID)
+	game.GetTeams()
 
-	game.HomeTeam, game.AwayTeam = teams[0], teams[1]
-
-	return game, err
+	return
 }
