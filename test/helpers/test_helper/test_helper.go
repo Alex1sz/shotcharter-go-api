@@ -50,12 +50,10 @@ func CreateTestPlayerForTeam(team models.Team) {
 
 // helper creates a game w/ HomeTeam & AwayTeam
 func CreateTestGame() (game models.Game) {
-	awayTeam, homeTeam := CreateTestTeam(), CreateTestTeam()
+	playerTeam1 := CreateTestPlayer()
+	playerTeam2 := CreateTestPlayer()
 
-	CreateTestPlayerForTeam(awayTeam)
-	CreateTestPlayerForTeam(homeTeam)
-
-	game = models.Game{HomeTeam: homeTeam, AwayTeam: awayTeam}
+	game = models.Game{HomeTeam: playerTeam1.Team, AwayTeam: playerTeam2.Team}
 	game.Create()
 
 	return game

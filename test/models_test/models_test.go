@@ -110,10 +110,13 @@ func TestGetTeams(t *testing.T) {
 
 func TestGameFindByID(t *testing.T) {
 	game := test_helper.CreateTestGame()
+	log.Println("game: ")
+	log.Println(game)
 
 	var returnedGame, err = models.FindGameByID(game.ID)
 	log.Println("returned game")
 	log.Println(returnedGame)
+	log.Println(returnedGame.HomeTeam)
 
 	if len(returnedGame.ID) < 1 {
 		t.Error("FindGameByID failed to return valid game")
@@ -125,7 +128,6 @@ func TestGameFindByID(t *testing.T) {
 	}
 
 	if err != nil {
-		log.Println(err)
-		t.Error("FindGameByID returns err along with game")
+		t.Error(err)
 	}
 }
