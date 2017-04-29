@@ -14,7 +14,7 @@ import (
 func GetGameByID(w http.ResponseWriter, req *http.Request) {
 	log.Println("GET request /games/:id")
 	params := mux.Vars(req)
-	game, err := models.FindGameByID(params["ID"])
+	game, err := models.FindGameByID(params["id"])
 
 	jsonResp, err := json.Marshal(game)
 
