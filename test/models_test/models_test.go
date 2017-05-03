@@ -4,7 +4,7 @@ import (
 	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
-	"log"
+	// "log"
 	"testing"
 )
 
@@ -12,12 +12,11 @@ func TestSetupBeforeAndAfterCountsHelper(t *testing.T) {
 	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("games")
 
 	if after_create_count != 0 {
-		t.Error("setupCountVariables failed, after_create_count expected to be 0")
+		t.Error("setupCountVariables failed, after_create_count expected to be 0" + sql)
 	}
 
 	if pre_create_count < 1 {
 		t.Error("No games created!")
-		log.Println(sql)
 	}
 }
 
@@ -98,32 +97,15 @@ func TestFindTeamByID(t *testing.T) {
 	}
 }
 
-func TestGetTeams(t *testing.T) {
-	var game_orig models.Game = test_helper.CreateTestGame()
-	game_copy := game_orig
-	game_orig.GetTeams()
-
-	if game_orig.HomeTeam.ID != game_copy.HomeTeam.ID {
-		t.Error("GetTeams function fails to correctly get teams expected HomeTeamID to equal: " + game_orig.HomeTeam.ID + "got : " + game_copy.HomeTeam.ID)
-	}
-}
-
 func TestGameFindByID(t *testing.T) {
 	game := test_helper.CreateTestGame()
-	log.Println("game: ")
-	log.Println(game)
-
-	var returnedGame, err = models.FindGameByID(game.ID)
-	log.Println("returned game")
-	log.Println(returnedGame)
-	log.Println(returnedGame.HomeTeam)
+	returnedGame, err := models.FindGameByID(game.ID)
 
 	if len(returnedGame.ID) < 1 {
 		t.Error("FindGameByID failed to return valid game")
 	}
 
 	if returnedGame.HomeTeam.ID != game.HomeTeam.ID {
-		log.Println("returnedGame.HomeTeam.ID: " + returnedGame.HomeTeam.ID + ", game.HomeTeam.ID: " + game.HomeTeam.ID)
 		t.Error("FindGameByID failed!")
 	}
 
