@@ -7,7 +7,7 @@ import (
 type Shot struct {
 	ID        string  `db:"id" json:"id"`
 	Player    *Player `db:"player_id" json:"player,omitempty"`
-	Game      *Game   `db:"game_id" json:"game,omitempty"`
+	Game      *Game   `db:"game_id" json:"-"`
 	PtValue   uint64  `db:"pt_value" json:"pt_value"`
 	Made      bool    `db:"made" json:"made"`
 	XAxis     int     `db:"x_axis" json:"x_axis"`
