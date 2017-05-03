@@ -6,12 +6,12 @@ import (
 )
 
 type Team struct {
-	ID        string `db:"id" json:"id"`
-	Name      string `db:"name" json:"name"`
-	CreatedAt string `db:"created_at" json:"created_at"`
-	UpdatedAt string `db:"updated_at" json:"updated_at"`
-	Players   []*Player
-	Games     []Game
+	ID   string `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+	// CreatedAt string `db:"created_at" json:"created_at"`
+	// UpdatedAt string `db:"updated_at" json:"updated_at"`
+	Players []*Player //`json:"players,omitempty"`
+	Games   []Game    `json:"games,omitempty"`
 }
 
 func (team *Team) Create() (err error) {
@@ -26,7 +26,7 @@ func (team *Team) Create() (err error) {
 
 func (team *Team) GetPlayers() {
 	players := []*Player{}
-	db.Db.Select(&players, "SELECT id, name, active, jersey_number, created_at, updated_at from players where team_id = $1", &team.ID)
+	db.Db.Select(&players, "SELECT id, name AS full_name, active, jersey_number, created_at, updated_at from players where team_id = $1", &team.ID)
 
 	team.Players = players
 	return
@@ -37,7 +37,7 @@ func FindTeamByID(id string) (team Team, err error) {
 
 	if err != nil {
 		log.Println(err)
-		return
+		return team, err
 	}
 	team.GetPlayers()
 
