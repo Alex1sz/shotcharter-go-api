@@ -8,9 +8,9 @@ import (
 
 type Player struct {
 	ID           string `db:"id" json:"id"`
-	Name         string `db:"name" json:"name"`
-	Active       bool   `db:"active" json:"active,omitempty"`
-	JerseyNumber int64  `db:"jersey_number" json:"jersey_number"`
+	Name         string `db:"full_name" json:"name"`
+	Active       bool   `db:"active" json:"active"`
+	JerseyNumber int64  `db:"jersey_number" json:"jersey_number,omitempty"`
 	Team         Team   `db:"team_id" json:"-"`
 	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
 	CreatedAt string `db:"created_at" json:"created_at"`
