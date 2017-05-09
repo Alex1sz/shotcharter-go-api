@@ -1,0 +1,18 @@
+hash: 99d37bd65567622e9e9b6ec4706eb0741dd4b19a7196b66ee34f951174cf3139
+updated: 2017-05-03T15:06:34.39305951-07:00
+imports:
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/gorilla/mux
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/jmoiron/sqlx
+  version: 3564e3a314b957a161fefa0e7aea85b4d741c94e
+  subpackages:
+  - reflectx
+- name: github.com/lib/pq
+  version: 2704adc878c21e1329f46f6e56a1c387d788ff94
+  subpackages:
+  - oid
+- name: github.com/urfave/negroni
+  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+testImports: []
