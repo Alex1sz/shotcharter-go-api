@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
-	"log"
+	// "log"
 	"net/http"
 	// neccessary to catch sql.ErrNoRows
 	"database/sql"
