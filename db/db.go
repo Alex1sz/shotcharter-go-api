@@ -1,6 +1,8 @@
 package db
 
 import (
+	"github.com/alex1sz/configor"
+	"github.com/alex1sz/shotcharter-go/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
@@ -108,13 +110,15 @@ func schemaSetup() (err error) {
 }
 
 func init() {
-	Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
+	var appConfig config.Config
+	configor.Load(&appConfig, "./config/db_conf.yml")
+
+	Db = sqlx.MustConnect(appConfig.Db.Driver, appConfig.Db.Connection)
 	err := schemaSetup()
 
 	if err != nil {
 		log.Println(err)
 	}
-
 	// check values before deploying production
 	Db.SetMaxIdleConns(4)
 	Db.SetMaxOpenConns(16)
