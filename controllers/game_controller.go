@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
-	"log"
+	// "log"
 	"net/http"
 	// neccessary to catch sql.ErrNoRows
 	"database/sql"
@@ -14,7 +14,6 @@ import (
 
 // GET /games/:id
 func GetGameByID(w http.ResponseWriter, req *http.Request) {
-	log.Println("GET request /games/:id")
 	params := mux.Vars(req)
 	var game models.Game
 	game, err := models.FindGameByID(params["id"])

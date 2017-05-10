@@ -1,0 +1,9 @@
+dependencies:
+  pre:
+    - curl https://glide.sh/get | sh
+    - glide install
+test:
+  pre:
+    - go vet ./...
+  override:
+    - go test $(glide novendor)

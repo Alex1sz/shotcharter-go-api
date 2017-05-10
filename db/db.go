@@ -1,6 +1,8 @@
 package db
 
 import (
+	"github.com/alex1sz/configor"
+	"github.com/alex1sz/shotcharter-go/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
@@ -78,6 +80,7 @@ CREATE TABLE IF NOT EXISTS shots (
   id uuid NOT NULL DEFAULT uuid_generate_v4(),
   player_id uuid,
   game_id uuid,
+  team_id uuid,
   pt_value integer NOT NULL DEFAULT 0,
   made boolean NOT NULL DEFAULT false,
   x_axis integer,
@@ -100,19 +103,21 @@ DROP TRIGGER IF EXISTS update_shots_updated_at ON shots;
 CREATE TRIGGER update_shots_updated_at BEFORE UPDATE ON shots FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 `
 
-func SchemaSetup() {
-	db, err := sqlx.Connect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	db.MustExec(schema)
+func schemaSetup() (err error) {
+	Db.MustExec(schema)
+	return
 }
 
 func init() {
-	Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
+	var appConfig config.Config
+	configor.Load(&appConfig, "./config/db_conf.yml")
 
+	Db = sqlx.MustConnect(appConfig.Db.Driver, appConfig.Db.Connection)
+	err := schemaSetup()
+
+	if err != nil {
+		log.Println(err)
+	}
 	// check values before deploying production
 	Db.SetMaxIdleConns(4)
 	Db.SetMaxOpenConns(16)
