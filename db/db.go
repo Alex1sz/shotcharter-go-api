@@ -105,7 +105,6 @@ CREATE TRIGGER update_shots_updated_at BEFORE UPDATE ON shots FOR EACH ROW EXECU
 
 func schemaSetup() (err error) {
 	Db.MustExec(schema)
-	log.Println("Schema loaded...")
 	return
 }
 
