@@ -3,6 +3,7 @@ package models
 import (
 	// database/sql import needed to use sql.NullString for sqlx Scan() functionality
 	// "database/sql"
+	"errors"
 	"github.com/alex1sz/shotcharter-go/db"
 	"log"
 	"time"
@@ -23,9 +24,9 @@ type Game struct {
 	AwayTeam Team `db:"away_team" json:"away_team"`
 }
 
-func (game *Game) Create() (err error) {
+func (game *Game) Create() (g Game, err error) {
 	err = db.Db.QueryRow("insert into games (home_team_id, away_team_id) values ($1, $2) returning id", game.HomeTeam.ID, game.AwayTeam.ID).Scan(&game.ID)
-	return
+	return *game, err
 }
 
 func FindGameByID(id string) (game Game, err error) {
@@ -36,4 +37,12 @@ func FindGameByID(id string) (game Game, err error) {
 		return
 	}
 	return
+}
+
+func (game Game) IsValid() (bool, error) {
+	if game.HomeTeam.ID == game.AwayTeam.ID {
+		err := errors.New("Invalid game HomeTeam.ID cannot be AwayTeam.ID")
+		return false, err
+	}
+	return true, nil
 }

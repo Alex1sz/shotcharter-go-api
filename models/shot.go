@@ -29,7 +29,6 @@ func (shot *Shot) Create() (s Shot, err error) {
 }
 
 func (shot Shot) IsValid() (bool, error) {
-	// check associated records are in DB/valid
 	_, err := FindGameByID(shot.Game.ID)
 	if err != nil {
 		return false, err
@@ -38,7 +37,6 @@ func (shot Shot) IsValid() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	// ensure shot taker is on shot team
 	playerIsOnTeam := team.PlayerIsOnTeam(shot.Player)
 
 	if !playerIsOnTeam {
