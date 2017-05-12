@@ -68,13 +68,12 @@ func TestCreateGame(t *testing.T) {
 func TestGetGameByID(t *testing.T) {
 	game := test_helper.CreateTestGame()
 	gameReqJSON, err := json.Marshal(game)
+
 	if err != nil {
 		t.Error(err)
 	}
-	reqURL := fmt.Sprintf("%s/"+game.ID, requestURL)
-	reader = strings.NewReader(string(gameReqJSON))
 
-	response, err := MakeRequest("GET", reqURL, reader)
+	response, err := MakeRequest("GET", fmt.Sprintf("%s/"+game.ID, requestURL), strings.NewReader(string(gameReqJSON)))
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,7 +82,7 @@ func TestGetGameByID(t *testing.T) {
 	}
 }
 
-// POST /teams/:team_id/players
+// POST /players
 func TestCreatePlayer(t *testing.T) {
 	team := test_helper.CreateTestTeam()
 	player := models.Player{Name: "Test player...", Active: true, JerseyNumber: 23, Team: team}
@@ -92,13 +91,30 @@ func TestCreatePlayer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	reqURL := fmt.Sprintf("%s/players", serverURL)
-	reader = strings.NewReader(string(requestJSON))
+	response, err := MakeRequest("POST", fmt.Sprintf("%s/players", serverURL), strings.NewReader(string(requestJSON)))
 
-	response, err := MakeRequest("POST", reqURL, reader)
 	if err != nil {
 		t.Error(err)
 	}
+	if response.StatusCode != 200 {
+		t.Errorf("Success Expected: %d", response.StatusCode)
+	}
+}
+
+// POST /teams
+func TestCreateTeam(t *testing.T) {
+	team := models.Team{Name: "Walt D's Mighty Ducks"}
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("POST", fmt.Sprintf("%s/teams", serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
+
 	if response.StatusCode != 200 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
