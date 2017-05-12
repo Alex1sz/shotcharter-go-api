@@ -37,7 +37,7 @@ func FindTeamByID(id string) (team Team, err error) {
 
 	if err != nil {
 		log.Println(err)
-		return team, err
+		return
 	}
 	team.GetPlayers()
 	return
