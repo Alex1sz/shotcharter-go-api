@@ -31,6 +31,10 @@ func CreateShot(w http.ResponseWriter, req *http.Request) {
 	shot.Create()
 	jsonResp, err := json.Marshal(shot)
 
+	if err != nil {
+		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	w.Write(jsonResp)
