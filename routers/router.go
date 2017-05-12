@@ -9,6 +9,7 @@ func InitRoutes() *mux.Router {
 	SetTeamRoutes(router)
 	SetGameRoutes(router)
 	SetPlayerRoutes(router)
+	SetShotRoutes(router)
 
 	return router
 }

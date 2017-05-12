@@ -98,6 +98,10 @@ CREATE INDEX IF NOT EXISTS index_shots_on_game_id
   ON shots USING btree
   (game_id);
 
+CREATE INDEX IF NOT EXISTS index_shots_on_team_id
+  ON shots USING btree
+  (team_id);
+
 DROP TRIGGER IF EXISTS update_shots_updated_at ON shots;
 
 CREATE TRIGGER update_shots_updated_at BEFORE UPDATE ON shots FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
@@ -113,12 +117,13 @@ func init() {
 	configor.Load(&appConfig, "./config/db_conf.yml")
 
 	Db = sqlx.MustConnect(appConfig.Db.Driver, appConfig.Db.Connection)
+	// Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
 	err := schemaSetup()
 
 	if err != nil {
 		log.Println(err)
 	}
-	// check values before deploying production
+	// sanity check values before deploying production
 	Db.SetMaxIdleConns(4)
 	Db.SetMaxOpenConns(16)
 }

@@ -37,9 +37,18 @@ func FindTeamByID(id string) (team Team, err error) {
 
 	if err != nil {
 		log.Println(err)
-		return team, err
+		return
 	}
 	team.GetPlayers()
-
 	return
+}
+
+func (team Team) PlayerIsOnTeam(player Player) bool {
+	for _, player := range team.Players {
+		if player.ID == player.ID {
+			// player found
+			return true
+		}
+	}
+	return false
 }

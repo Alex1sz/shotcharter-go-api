@@ -7,7 +7,7 @@ import (
 	// "log"
 	"net/http"
 	// neccessary to catch sql.ErrNoRows
-	"database/sql"
+	// "database/sql"
 
 	"github.com/alex1sz/shotcharter-go/models"
 )
@@ -19,11 +19,7 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 	game, err := models.FindGameByID(params["id"])
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			utils.RespondWithAppError(w, err, "An unexpected error has occurred", 404)
-		} else {
-			utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
-		}
+		utils.HandleFindError(w, err)
 		return
 	}
 	jsonResp, err := json.Marshal(game)
@@ -32,8 +28,33 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResp)
+}
+
+// POST /games
+func CreateGame(w http.ResponseWriter, req *http.Request) {
+	var game models.Game
+	err := json.NewDecoder(req.Body).Decode(&game)
+
+	if err != nil {
+		utils.RespondWithAppError(w, err, "Invalid team data", 500)
+		return
+	}
+	game, err = game.Create()
+
+	if err != nil {
+		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
+		return
+	}
+	jsonResp, err := json.Marshal(game)
+
+	if err != nil {
+		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
 	w.Write(jsonResp)
 }

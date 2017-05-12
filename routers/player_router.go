@@ -8,8 +8,8 @@ import (
 
 func SetPlayerRoutes(router *mux.Router) *mux.Router {
 	playerRouter := mux.NewRouter()
-	playerRouter.HandleFunc("/{id}/players", controllers.CreatePlayer).Methods("POST")
-	router.PathPrefix("/teams").Handler(negroni.New(negroni.Wrap(playerRouter)))
+	playerRouter.HandleFunc("/players", controllers.CreatePlayer).Methods("POST")
+	router.PathPrefix("/players").Handler(negroni.New(negroni.Wrap(playerRouter)))
 
 	return router
 }

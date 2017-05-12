@@ -1,6 +1,8 @@
-hash: 99d37bd65567622e9e9b6ec4706eb0741dd4b19a7196b66ee34f951174cf3139
-updated: 2017-05-03T15:06:34.39305951-07:00
+hash: 4e349369ffec2386f568c18ae3eeaa6ff42ac3aec50e9ff242dba0826af018af
+updated: 2017-05-10T15:54:29.261907506-07:00
 imports:
+- name: github.com/alex1sz/configor
+  version: 0f6b3a6e1f2b56631eb2a5a063c0a05ca245cba0
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
@@ -15,4 +17,6 @@ imports:
   - oid
 - name: github.com/urfave/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+- name: gopkg.in/yaml.v2
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []

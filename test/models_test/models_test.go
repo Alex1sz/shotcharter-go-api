@@ -68,7 +68,7 @@ func TestShotCreate(t *testing.T) {
 	player := test_helper.CreateTestPlayer()
 	game := test_helper.CreateTestGameForHomeTeam(player.Team)
 
-	shot := models.Shot{Player: &player, Game: &game, PtValue: 3, Made: true, XAxis: 312, YAxis: 250}
+	shot := models.Shot{Player: player, Game: game, Team: player.Team, PtValue: 3, Made: true, XAxis: 312, YAxis: 250}
 	shot.Create()
 
 	db.Db.Get(after_create_count, sql)

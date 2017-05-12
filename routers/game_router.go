@@ -8,6 +8,7 @@ import (
 
 func SetGameRoutes(router *mux.Router) *mux.Router {
 	gameRouter := mux.NewRouter()
+	gameRouter.HandleFunc("/games", controllers.CreateGame).Methods("POST")
 	gameRouter.HandleFunc("/games/{id}", controllers.GetGameByID).Methods("GET")
 	router.PathPrefix("/games").Handler(negroni.New(negroni.Wrap(gameRouter)))
 
