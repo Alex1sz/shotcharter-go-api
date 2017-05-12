@@ -7,7 +7,7 @@ import (
 	// "log"
 	"net/http"
 	// neccessary to catch sql.ErrNoRows
-	"database/sql"
+	// "database/sql"
 
 	"github.com/alex1sz/shotcharter-go/models"
 )
@@ -19,11 +19,7 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 	game, err := models.FindGameByID(params["id"])
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			utils.RespondWithAppError(w, err, "An unexpected error has occurred", 404)
-		} else {
-			utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
-		}
+		utils.HandleFindError(w, err)
 		return
 	}
 	jsonResp, err := json.Marshal(game)
