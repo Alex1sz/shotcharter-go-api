@@ -20,14 +20,12 @@ func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "An unexpected error occurred req not valid", 500)
 	}
 	player.Team = team
-
 	err = json.NewDecoder(req.Body).Decode(&player)
 
 	if err != nil {
 		utils.RespondWithAppError(w, err, "Invalid player data", 500)
 	}
 	player.Create()
-
 	jsonResp, err := json.Marshal(player)
 
 	w.Header().Set("Content-Type", "application/json")
