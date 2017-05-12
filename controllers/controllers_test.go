@@ -3,9 +3,9 @@ package controllers_test
 import (
 	"encoding/json"
 	"fmt"
-	// "github.com/alex1sz/shotcharter-go/controllers"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/routers"
+	//"github.com/alex1sz/shotcharter-go/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
 	"io"
 	// "log"
@@ -19,11 +19,13 @@ var (
 	server     *httptest.Server
 	reader     io.Reader
 	requestURL string
+	serverURL  string
 )
 
 func init() {
 	server = httptest.NewServer(routers.InitRoutes())
 	requestURL = fmt.Sprintf("%s/games", server.URL)
+	serverURL = server.URL
 }
 
 // abstract out request/response error handling for usage in multiple tests
@@ -73,6 +75,27 @@ func TestGetGameByID(t *testing.T) {
 	reader = strings.NewReader(string(gameReqJSON))
 
 	response, err := MakeRequest("GET", reqURL, reader)
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 200 {
+		t.Errorf("Success Expected: %d", response.StatusCode)
+	}
+}
+
+// POST /teams/:team_id/players
+func TestCreatePlayer(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	player := models.Player{Name: "Test player...", Active: true, JerseyNumber: 23, Team: team}
+
+	requestJSON, err := json.Marshal(player)
+	if err != nil {
+		t.Error(err)
+	}
+	reqURL := fmt.Sprintf("%s/players", serverURL)
+	reader = strings.NewReader(string(requestJSON))
+
+	response, err := MakeRequest("POST", reqURL, reader)
 	if err != nil {
 		t.Error(err)
 	}

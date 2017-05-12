@@ -2,27 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/utilities"
-	"github.com/gorilla/mux"
 	// "log"
 	"net/http"
-
-	"github.com/alex1sz/shotcharter-go/models"
 )
 
-// POST /teams/:id/players
+// POST /players
 func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 	var player models.Player
-	params := mux.Vars(req)
-	team, err := models.FindTeamByID(params["id"])
+	err := json.NewDecoder(req.Body).Decode(&player)
 
 	if err != nil {
-		utils.RespondWithAppError(w, err, "An unexpected error occurred req not valid", 500)
+		utils.RespondWithAppError(w, err, "Invalid player data", 500)
 	}
-	player.Team = team
-	err = json.NewDecoder(req.Body).Decode(&player)
+	playerIsValid, err := player.IsValid()
 
-	if err != nil {
+	if !playerIsValid {
 		utils.RespondWithAppError(w, err, "Invalid player data", 500)
 	}
 	player.Create()

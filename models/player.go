@@ -11,7 +11,7 @@ type Player struct {
 	Name         string `db:"full_name" json:"name"`
 	Active       bool   `db:"active" json:"active"`
 	JerseyNumber int64  `db:"jersey_number" json:"jersey_number,omitempty"`
-	Team         Team   `db:"team_id" json:"-"`
+	Team         Team   `db:"team" json:"team"`
 	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
@@ -29,4 +29,9 @@ func (player *Player) Create() (p Player, err error) {
 		return
 	}
 	return
+}
+
+func (player Player) IsValid() (bool, error) {
+	teamExistsBool, err := RowExists("select 1 from teams WHERE id=$1", player.Team.ID)
+	return teamExistsBool, err
 }

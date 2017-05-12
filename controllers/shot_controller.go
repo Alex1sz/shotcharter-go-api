@@ -15,7 +15,6 @@ import (
 
 // POST /shots
 func CreateShot(w http.ResponseWriter, req *http.Request) {
-	// params := mux.Vars(req)
 	var shot models.Shot
 	err := json.NewDecoder(req.Body).Decode(&shot)
 
