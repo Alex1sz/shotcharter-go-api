@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"github.com/alex1sz/shotcharter-go/db"
 	// "log"
 )
@@ -28,20 +27,11 @@ func (shot *Shot) Create() (s Shot, err error) {
 	return
 }
 
-func (shot Shot) IsValid() (bool, error) {
-	_, err := FindGameByID(shot.Game.ID)
-	if err != nil {
-		return false, err
-	}
-	team, err := FindTeamByID(shot.Team.ID)
-	if err != nil {
-		return false, err
-	}
-	playerIsOnTeam := team.PlayerIsOnTeam(shot.Player)
+func (shot Shot) IsValid() (playerIsOnTeam bool, err error) {
+	playerIsOnTeam, err = RowExists("select 1 from players where id=$1 AND team_id=$2", shot.Player.ID, shot.Team.ID)
 
-	if !playerIsOnTeam {
-		err = errors.New("shot player is not on shot team")
-		return false, err
+	if err != nil || !playerIsOnTeam {
+		return
 	}
 	return true, err
 }

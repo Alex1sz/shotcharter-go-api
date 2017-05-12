@@ -3,8 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
-	// gorilla/mux used for req params
-	// "github.com/gorilla/mux"
 	// "log"
 	"net/http"
 	// neccessary to catch sql.ErrNoRows
@@ -25,11 +23,16 @@ func CreateShot(w http.ResponseWriter, req *http.Request) {
 	shotIsValid, err := shot.IsValid()
 
 	if !shotIsValid {
-		utils.RespondWithAppError(w, err, "Shot associations are not valid", 500)
+		utils.RespondWithAppError(w, err, "Invalid shot data: see associations", 500)
+		return
 	}
 	shot.Create()
 	jsonResp, err := json.Marshal(shot)
 
+	if err != nil {
+		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	w.Write(jsonResp)

@@ -114,7 +114,44 @@ func TestCreateTeam(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	if response.StatusCode != 200 {
+		t.Errorf("Success Expected: %d", response.StatusCode)
+	}
+}
 
+// GET /teams/:id
+func TestGetTeamByID(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("GET", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 200 {
+		t.Errorf("Success Expected: %d", response.StatusCode)
+	}
+}
+
+// POST /shots
+func TestCreateShot(t *testing.T) {
+	player := test_helper.CreateTestPlayer()
+	shot := models.Shot{Player: player, Team: player.Team, PtValue: 2, Made: true, XAxis: 320, YAxis: 200}
+
+	requestJSON, err := json.Marshal(shot)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("POST", fmt.Sprintf("%s/shots", serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
 	if response.StatusCode != 200 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
