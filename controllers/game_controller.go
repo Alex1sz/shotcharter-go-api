@@ -22,15 +22,7 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 		utils.HandleFindError(w, err)
 		return
 	}
-	jsonResp, err := json.Marshal(game)
-
-	if err != nil {
-		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonResp)
+	utils.RespondWithJSON(w, game)
 }
 
 // POST /games
@@ -48,13 +40,5 @@ func CreateGame(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}
-	jsonResp, err := json.Marshal(game)
-
-	if err != nil {
-		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	w.Write(jsonResp)
+	utils.RespondWithJSON(w, game)
 }

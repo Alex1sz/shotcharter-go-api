@@ -24,14 +24,5 @@ func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.Create()
-	jsonResp, err := json.Marshal(player)
-
-	if err != nil {
-		utils.RespondWithAppError(w, err, "Unexpected error occurred", 500)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	w.Write(jsonResp)
+	utils.RespondWithJSON(w, player)
 }

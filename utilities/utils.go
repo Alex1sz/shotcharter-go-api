@@ -43,3 +43,16 @@ func HandleFindError(w http.ResponseWriter, err error) {
 	}
 	return
 }
+
+// abstracts out shared marshaling of responseJSON, err handling, setting of headers
+func RespondWithJSON(w http.ResponseWriter, modelObj interface{}) {
+	jsonResp, err := json.Marshal(modelObj)
+
+	if err != nil {
+		RespondWithAppError(w, err, "An unexpected error has occurred", 500)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	w.Write(jsonResp)
+}
