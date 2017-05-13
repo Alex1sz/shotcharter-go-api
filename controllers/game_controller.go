@@ -5,11 +5,8 @@ import (
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
 	// "log"
-	"net/http"
-	// neccessary to catch sql.ErrNoRows
-	// "database/sql"
-
 	"github.com/alex1sz/shotcharter-go/models"
+	"net/http"
 )
 
 // GET /games/:id

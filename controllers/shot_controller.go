@@ -4,11 +4,8 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	// "log"
-	"net/http"
-	// neccessary to catch sql.ErrNoRows
-	// "database/sql"
-
 	"github.com/alex1sz/shotcharter-go/models"
+	"net/http"
 )
 
 // POST /shots

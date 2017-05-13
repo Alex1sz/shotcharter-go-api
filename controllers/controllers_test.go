@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/routers"
-	//"github.com/alex1sz/shotcharter-go/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
 	"io"
 	// "log"
