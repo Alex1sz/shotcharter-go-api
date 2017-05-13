@@ -4,7 +4,6 @@ import (
 	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
-	// "time"
 )
 
 // count based test setup helper used by Create() tests
