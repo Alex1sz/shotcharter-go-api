@@ -19,14 +19,21 @@ type Game struct {
 	StartAt   NullTime `db:"start_at" json:"start_at,omitempty"`
 	HomeScore uint8    `db:"home_score" json:"home_score"`
 	AwayScore uint8    `db:"away_score" json:"away_score"`
-
-	HomeTeam Team `db:"home_team" json:"home_team"`
-	AwayTeam Team `db:"away_team" json:"away_team"`
+	HomeTeam  Team     `db:"home_team" json:"home_team"`
+	AwayTeam  Team     `db:"away_team" json:"away_team"`
+	Shots     []*Shot
 }
 
-func (game *Game) Create() (g Game, err error) {
+func (game *Game) GetShots() {
+	shots := []*Shot{}
+	db.Db.Select(&shots, "SELECT id, player_id, game_id, team_id, pt_value, made, x_axis, y_axis FROM shots WHERE shots.game_id = $1", game.ID)
+	game.Shots = shots
+	return
+}
+
+func (game *Game) Create() (err error) {
 	err = db.Db.QueryRow("insert into games (home_team_id, away_team_id) values ($1, $2) returning id", game.HomeTeam.ID, game.AwayTeam.ID).Scan(&game.ID)
-	return *game, err
+	return
 }
 
 func FindGameByID(id string) (game Game, err error) {
