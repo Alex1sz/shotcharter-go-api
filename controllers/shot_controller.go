@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/alex1sz/shotcharter-go/utilities"
+	"github.com/alex1sz/shotcharter-go-api/utilities"
 	// "log"
-	"github.com/alex1sz/shotcharter-go/models"
+	"github.com/alex1sz/shotcharter-go-api/models"
 	"net/http"
 )
 

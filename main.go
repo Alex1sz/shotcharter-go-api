@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/alex1sz/shotcharter-go/db"
-	"github.com/alex1sz/shotcharter-go/routers"
+	"github.com/alex1sz/shotcharter-go-api/db"
+	"github.com/alex1sz/shotcharter-go-api/routers"
 	"log"
 	"net/http"
 	"time"

@@ -1,7 +1,7 @@
 package db_test
 
 import (
-	"github.com/alex1sz/shotcharter-go/db"
+	"github.com/alex1sz/shotcharter-go-api/db"
 	"testing"
 )
 

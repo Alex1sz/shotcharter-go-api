@@ -1,8 +1,8 @@
 package test_helper
 
 import (
-	"github.com/alex1sz/shotcharter-go/models"
-	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
+	"github.com/alex1sz/shotcharter-go-api/models"
+	"github.com/alex1sz/shotcharter-go-api/test/helpers/rand"
 )
 
 // Create test team for usage in tests

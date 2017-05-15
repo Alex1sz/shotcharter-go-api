@@ -1,4 +1,4 @@
-package: github.com/alex1sz/shotcharter-go
+package: github.com/alex1sz/shotcharter-go-api
 import:
 - package: github.com/gorilla/mux
   version: v1.3.0

@@ -2,7 +2,7 @@ package config_test
 
 import (
 	"github.com/alex1sz/configor"
-	"github.com/alex1sz/shotcharter-go/config"
+	"github.com/alex1sz/shotcharter-go-api/config"
 	"testing"
 )
 

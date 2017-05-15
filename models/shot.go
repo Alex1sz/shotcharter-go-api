@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/alex1sz/shotcharter-go/db"
+	"github.com/alex1sz/shotcharter-go-api/db"
 	// "log"
 )
 

@@ -1,9 +1,9 @@
 package models_test
 
 import (
-	"github.com/alex1sz/shotcharter-go/models"
-	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
-	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
+	"github.com/alex1sz/shotcharter-go-api/models"
+	"github.com/alex1sz/shotcharter-go-api/test/helpers/rand"
+	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
 	// "log"
 	"testing"
 )

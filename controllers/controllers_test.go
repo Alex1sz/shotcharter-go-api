@@ -3,9 +3,9 @@ package controllers_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alex1sz/shotcharter-go/models"
-	"github.com/alex1sz/shotcharter-go/routers"
-	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
+	"github.com/alex1sz/shotcharter-go-api/models"
+	"github.com/alex1sz/shotcharter-go-api/routers"
+	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
 	"io"
 	// "log"
 	"net/http"

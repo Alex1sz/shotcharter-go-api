@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
-	"github.com/alex1sz/shotcharter-go/db"
+	"github.com/alex1sz/shotcharter-go-api/db"
 )
 
 func RowExists(query string, args ...interface{}) (exists bool, err error) {

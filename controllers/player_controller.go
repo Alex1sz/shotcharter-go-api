@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/alex1sz/shotcharter-go/models"
-	"github.com/alex1sz/shotcharter-go/utilities"
+	"github.com/alex1sz/shotcharter-go-api/models"
+	"github.com/alex1sz/shotcharter-go-api/utilities"
 	"net/http"
 )
 

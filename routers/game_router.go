@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/alex1sz/shotcharter-go/controllers"
+	"github.com/alex1sz/shotcharter-go-api/controllers"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
 )

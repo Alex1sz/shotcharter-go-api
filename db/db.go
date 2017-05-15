@@ -2,7 +2,7 @@ package db
 
 import (
 	"github.com/alex1sz/configor"
-	"github.com/alex1sz/shotcharter-go/config"
+	"github.com/alex1sz/shotcharter-go-api/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
