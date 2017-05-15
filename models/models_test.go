@@ -113,3 +113,17 @@ func TestGameFindByID(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestGameIsValid(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	game := models.Game{HomeTeam: team, AwayTeam: team}
+
+	gameValidBool, err := game.IsValid()
+
+	if gameValidBool {
+		t.Error("game.IsValid() failed! expected bool to be false")
+	}
+	if err == nil {
+		t.Error("Expected: 'Invalid game HomeTeam.ID cannot be AwayTeam.ID'")
+	}
+}
