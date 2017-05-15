@@ -1,7 +1,7 @@
 machine:
   environment:
-    IMPORT_PATH: "home/ubuntu/.go_workspace/src/github.com/alex1sz"
-    APP_PATH: "$IMPORT_PATH/alex1sz"
+    IMPORT_PATH: "home/ubuntu/.go_workspace/src/github.com/Alex1sz"
+    APP_PATH: "$IMPORT_PATH/shotcharter-go-api"
 
 dependencies:
   pre:
