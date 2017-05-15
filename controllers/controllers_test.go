@@ -155,3 +155,27 @@ func TestCreateShot(t *testing.T) {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
 }
+
+// GET /games/:id game w/shots
+func TestGetGameByIDForGameWithShots(t *testing.T) {
+	game := test_helper.CreateTestGameWithShots()
+	gameReqJSON, err := json.Marshal(game)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	response, err := MakeRequest("GET", fmt.Sprintf("%s/"+game.ID, requestURL), strings.NewReader(string(gameReqJSON)))
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 200 {
+		t.Errorf("Success Expected: %d", response.StatusCode)
+	}
+	var gameResp models.Game
+	err = json.NewDecoder(response.Body).Decode(&gameResp)
+
+	if len(gameResp.Shots) != 2 {
+		t.Error("JSON response does not contain game's shots")
+	}
+}
