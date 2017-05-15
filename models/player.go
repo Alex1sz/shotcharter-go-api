@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go/db"
-	"log"
+	// "log"
 )
 
 type Player struct {
@@ -17,7 +17,7 @@ type Player struct {
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
 
-func (player *Player) Create() (p Player, err error) {
+func (player *Player) Create() (err error) {
 	if &player.Team == nil {
 		err = errors.New("Team not found")
 		return
@@ -25,7 +25,6 @@ func (player *Player) Create() (p Player, err error) {
 	err = db.Db.QueryRow("insert into players (name, active, jersey_number, team_id) values ($1, $2, $3, $4) returning id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
 
 	if err != nil {
-		log.Println(err)
 		return
 	}
 	return

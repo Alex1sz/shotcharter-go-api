@@ -1,18 +1,9 @@
 package test_helper
 
 import (
-	"github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
 )
-
-// count based test setup helper used by Create() tests
-func SetupBeforeAndAfterCounts(table string) (pre_create_count int, after_create_count int, sql_query string) {
-	sql_query = "SELECT COUNT(*) from " + table
-	db.Db.Get(&pre_create_count, sql_query)
-
-	return pre_create_count, after_create_count, sql_query
-}
 
 // Create test team for usage in tests
 func CreateTestTeam() (team models.Team) {
@@ -24,7 +15,6 @@ func CreateTestTeam() (team models.Team) {
 // helper method creates test player w/ team
 func CreateTestPlayer() (player models.Player) {
 	team := CreateTestTeam()
-
 	player = models.Player{Name: rand.String(10), Active: true, JerseyNumber: 23, Team: team}
 	player.Create()
 

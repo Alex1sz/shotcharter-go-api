@@ -1,80 +1,77 @@
 package models_test
 
 import (
-	"github.com/alex1sz/shotcharter-go/db"
+	// "github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
+	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"
 	// "log"
 	"testing"
 )
 
-func TestSetupBeforeAndAfterCountsHelper(t *testing.T) {
-	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("games")
-
-	if after_create_count != 0 {
-		t.Error("setupCountVariables failed, after_create_count expected to be 0" + sql)
+// test helper for checking presence of attribute
+func isPresent(attribute interface{}) bool {
+	if attribute != nil {
+		return true
 	}
-
-	if pre_create_count < 1 {
-		t.Error("No games created!")
-	}
+	return false
 }
 
 func TestTeamCreate(t *testing.T) {
-	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("teams")
-	test_helper.CreateTestTeam()
+	team := models.Team{Name: rand.String(10)}
+	err := team.Create()
 
-	db.Db.Get(after_create_count, sql)
-
-	if after_create_count > pre_create_count {
-		t.Error("Team create failed!")
+	if !isPresent(team.ID) {
+		t.Error("team Create() failed. Expected team.ID to be present")
+	}
+	if err != nil {
+		t.Error("Team Create() returns error")
 	}
 }
 
 func TestPlayerCreate(t *testing.T) {
-	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("players")
-
 	team := test_helper.CreateTestTeam()
 
 	player := models.Player{Name: "Alejandro Alejandro", Active: true, JerseyNumber: 24, Team: team}
-	player.Create()
+	err := player.Create()
 
-	db.Db.Get(after_create_count, sql)
-
-	if after_create_count > pre_create_count {
-		t.Error("Player create failed!")
+	if !isPresent(player.ID) {
+		t.Error("Player Create() failed. Expected player.ID to be present")
+	}
+	if err != nil {
+		t.Error("Player Create() returns error")
 	}
 }
 
 func TestGameCreate(t *testing.T) {
-	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("games")
-
 	home_team := test_helper.CreateTestTeam()
 	away_team := test_helper.CreateTestTeam()
 
 	game := models.Game{HomeTeam: home_team, AwayTeam: away_team}
-	game.Create()
+	err := game.Create()
 
-	db.Db.Get(after_create_count, sql)
+	if !isPresent(game.ID) {
+		t.Error("Game not created: game.ID not present")
+	}
 
-	if after_create_count > pre_create_count {
-		t.Error("Game create failed!")
+	if err != nil {
+		t.Error("game Create() returns error")
 	}
 }
 
 func TestShotCreate(t *testing.T) {
-	var pre_create_count, after_create_count, sql = test_helper.SetupBeforeAndAfterCounts("shots")
-
 	player := test_helper.CreateTestPlayer()
 	game := test_helper.CreateTestGameForHomeTeam(player.Team)
 
 	shot := models.Shot{Player: player, Game: game, Team: player.Team, PtValue: 3, Made: true, XAxis: 312, YAxis: 250}
-	shot.Create()
+	err := shot.Create()
 
-	db.Db.Get(after_create_count, sql)
+	if !isPresent(shot.ID) {
+		t.Error("Shot Create() failed: shot.ID not present")
+	}
 
-	if after_create_count > pre_create_count {
-		t.Error("Shot not created!")
+	if err != nil {
+		t.Error("shot Create() returns err")
 	}
 }
 

@@ -18,12 +18,9 @@ type Shot struct {
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
 
-func (shot *Shot) Create() (s Shot, err error) {
-	err = db.Db.QueryRow("insert into shots (player_id, game_id, team_id, pt_value, made, x_axis, y_axis) values ($1, $2, $3, $4, $5, $6) returning id", shot.Player.ID, shot.Game.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&shot.ID)
+func (shot *Shot) Create() (err error) {
+	err = db.Db.QueryRow("insert into shots (player_id, game_id, team_id, pt_value, made, x_axis, y_axis) values ($1, $2, $3, $4, $5, $6, $7) returning id", shot.Player.ID, shot.Game.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&shot.ID)
 
-	if err != nil {
-		return
-	}
 	return
 }
 

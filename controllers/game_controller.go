@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/utilities"
 	"github.com/gorilla/mux"
-	// "log"
-	"github.com/alex1sz/shotcharter-go/models"
 	"net/http"
 )
 
@@ -31,7 +30,7 @@ func CreateGame(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "Invalid team data", 500)
 		return
 	}
-	game, err = game.Create()
+	err = game.Create()
 
 	if err != nil {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
