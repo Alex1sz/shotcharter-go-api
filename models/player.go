@@ -8,13 +8,13 @@ import (
 
 type Player struct {
 	ID           string `db:"id" json:"id"`
-	Name         string `db:"full_name" json:"name"`
-	Active       bool   `db:"active" json:"active"`
+	Name         string `db:"full_name" json:"name,omitempty"`
+	Active       bool   `db:"active" json:"active,omitempty"`
 	JerseyNumber int64  `db:"jersey_number" json:"jersey_number,omitempty"`
 	Team         Team   `db:"team" json:"team"`
 	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
-	CreatedAt string `db:"created_at" json:"created_at"`
-	UpdatedAt string `db:"updated_at" json:"updated_at"`
+	CreatedAt string `db:"created_at" json:"created_at,omitempty"`
+	UpdatedAt string `db:"updated_at" json:"updated_at,omitempty"`
 }
 
 func (player *Player) Create() (err error) {

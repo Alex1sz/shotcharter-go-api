@@ -47,3 +47,20 @@ func CreateTestGame() (game models.Game) {
 
 	return game
 }
+
+// helper creates a game w/ shots
+func CreateTestGameWithShots() (game models.Game) {
+	playerTeam1 := CreateTestPlayer()
+	playerTeam2 := CreateTestPlayer()
+
+	game = models.Game{HomeTeam: playerTeam1.Team, AwayTeam: playerTeam2.Team}
+	game.Create()
+
+	shot := models.Shot{Player: playerTeam1, Game: game, Team: playerTeam1.Team, PtValue: 2, Made: true, XAxis: 312, YAxis: 250}
+	shot.Create()
+
+	shot2 := models.Shot{Player: playerTeam2, Game: game, Team: playerTeam2.Team, PtValue: 2, Made: true, XAxis: 110, YAxis: 212}
+	shot2.Create()
+
+	return game
+}

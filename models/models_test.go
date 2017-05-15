@@ -1,7 +1,6 @@
 package models_test
 
 import (
-	// "github.com/alex1sz/shotcharter-go/db"
 	"github.com/alex1sz/shotcharter-go/models"
 	"github.com/alex1sz/shotcharter-go/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go/test/helpers/test_helper"

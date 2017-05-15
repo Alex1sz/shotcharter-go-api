@@ -7,13 +7,13 @@ import (
 
 type Shot struct {
 	ID        string `db:"id" json:"id"`
-	Player    Player `db:"player_id" json:"player,omitempty"`
-	Game      Game   `db:"game_id" json:"-"`
-	Team      Team   `db:"team_id" json:"team"`
+	Player    Player `db:"player" json:"player,omitempty"`
+	Game      Game   `db:"game" json:"-"`
+	Team      Team   `db:"team" json:"team,omitempty"`
 	PtValue   uint64 `db:"pt_value" json:"pt_value"`
 	Made      bool   `db:"made" json:"made"`
-	XAxis     int    `db:"x_axis" json:"x_axis"`
-	YAxis     int    `db:"y_axis" json:"y_axis"`
+	XAxis     uint64 `db:"x_axis" json:"x_axis"`
+	YAxis     uint64 `db:"y_axis" json:"y_axis"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
