@@ -175,7 +175,7 @@ func TestGetGameByIDForGameWithShots(t *testing.T) {
 	var gameResp models.Game
 	err = json.NewDecoder(response.Body).Decode(&gameResp)
 
-	if len(gameResp.Shots) != 2 {
+	if len(gameResp.HomeShots) != 1 && len(gameResp.AwayShots) != 1 {
 		t.Error("JSON response does not contain game's shots")
 	}
 }

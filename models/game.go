@@ -19,7 +19,8 @@ type Game struct {
 	AwayScore uint8    `db:"away_score" json:"away_score"`
 	HomeTeam  Team     `db:"home_team" json:"home_team"`
 	AwayTeam  Team     `db:"away_team" json:"away_team"`
-	Shots     []*Shot  `json:"shots,omitempty"`
+	HomeShots []*Shot  `json:"home_shots,omitempty"`
+	AwayShots []*Shot  `json:"away_shots,omitempty"`
 }
 
 func (game *Game) Create() (err error) {
@@ -30,8 +31,16 @@ func (game *Game) Create() (err error) {
 func (game *Game) GetShots() {
 	shots := []*Shot{}
 	db.Db.Select(&shots, `SELECT shots.id AS id, shots.player_id "player.id", shots.game_id "game.id", shots.team_id "team.id", pt_value, made, x_axis, y_axis, shots.created_at "created_at", shots.updated_at "updated_at" FROM shots WHERE shots.game_id = $1`, &game.ID)
-	game.Shots = shots
+	homeShots, awayShots := []*Shot{}, []*Shot{}
 
+	for _, shot := range shots {
+		if shot.Team.ID == game.HomeTeam.ID {
+			homeShots = append(homeShots, shot)
+		} else {
+			awayShots = append(awayShots, shot)
+		}
+	}
+	game.HomeShots, game.AwayShots = homeShots, awayShots
 	return
 }
 
