@@ -8,7 +8,7 @@ machine:
 database:
   override:
     - createdb shotcharter_go_development
-    - psql shotcharter_go_development -f "$IMPORT_PATH/db/schema_setup.sql"
+    - psql shotcharter_go_development -f "$APP_PATH/db/schema_setup.sql"
 
 dependencies:
   pre:
