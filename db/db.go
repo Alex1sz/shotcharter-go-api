@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/alex1sz/configor"
+	// "github.com/alex1sz/configor"
 	"github.com/alex1sz/shotcharter-go-api/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -113,10 +113,8 @@ func schemaSetup() (err error) {
 }
 
 func init() {
-	var appConfig config.Config
-	configor.Load(&appConfig, "../config/db_conf.yml")
-	log.Println(appConfig)
-	//
+	appConfig := config.SetConfig()
+
 	Db = sqlx.MustConnect(appConfig.Db.Driver, appConfig.Db.Connection)
 	// Db = sqlx.MustConnect("postgres", "dbname=shotcharter_go_development host=localhost sslmode=disable")
 	err := schemaSetup()

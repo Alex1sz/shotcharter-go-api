@@ -1,7 +1,13 @@
 machine:
   environment:
-    IMPORT_PATH: "home/ubuntu/.go_workspace/src/github.com/Alex1sz"
+    IMPORT_PATH: "home/ubuntu/.go_project/src/github.com/Alex1sz"
     APP_PATH: "$IMPORT_PATH/shotcharter-go-api"
+  services:
+    - postgresql
+
+database:
+  override:
+    - createdb shotcharter_go_test
 
 dependencies:
   pre:
