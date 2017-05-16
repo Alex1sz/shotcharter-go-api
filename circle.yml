@@ -8,7 +8,7 @@ machine:
 database:
   override:
     - createdb shotcharter_go_test
-    - psql shotcharter_go_development -f db/schema_setup.sql
+    - psql shotcharter_go_test -f db/schema_setup.sql
 
 dependencies:
   override:
