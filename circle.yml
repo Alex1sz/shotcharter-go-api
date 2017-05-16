@@ -7,7 +7,8 @@ machine:
 
 database:
   override:
-    - createdb shotcharter_go_test
+    - createdb shotcharter_go_development
+    - psql shotcharter_go_development -f "$IMPORT_PATH/db/schema_setup.sql"
 
 dependencies:
   pre:
@@ -19,5 +20,6 @@ test:
     - mkdir -p "$IMPORT_PATH"
     - ln -sf "$(pwd)" "$APP_PATH"
     - cd "$APP_PATH" && glide install
+    - go vet ./...
   override:
-    - cd "$APP_PATH" && go test -cover $(glide nv)
+    - cd "$APP_PATH" && go test $(glide novendor)
