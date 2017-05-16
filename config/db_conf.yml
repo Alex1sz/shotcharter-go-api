@@ -1,3 +1,0 @@
-db:
-  driver: postgres
-  connection: dbname=shotcharter_go_development host=localhost sslmode=disable
