@@ -6,3 +6,4 @@ import:
 - package: github.com/lib/pq
 - package: github.com/urfave/negroni
   version: v0.2.0
+- package: github.com/alex1sz/configor

@@ -1,6 +1,8 @@
-hash: 846074284262bc0037813de718ba6993d09aa75e2761279ab587e961bd2f0dc7
-updated: 2017-05-16T12:46:53.421396717-07:00
+hash: 07cd168e22def1d5124b8c7971b4d687a85324f37c1f6a412b1c144dcf2edac2
+updated: 2017-05-16T13:52:50.288468193-07:00
 imports:
+- name: github.com/alex1sz/configor
+  version: 0f6b3a6e1f2b56631eb2a5a063c0a05ca245cba0
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
