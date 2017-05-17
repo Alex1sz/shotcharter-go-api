@@ -1,7 +1,6 @@
 machine:
   environment:
-    GOPATH: "$HOME/.go_project"
-    IMPORT_PATH: "$GOPATH/src/github.com/$CIRCLE_PROJECT_USERNAME"
+    IMPORT_PATH: "home/ubuntu/.go_project/src/github.com/$CIRCLE_PROJECT_USERNAME"
     APP_PATH: "$IMPORT_PATH/$CIRCLE_PROJECT_REPONAME"
   services:
     - postgresql
@@ -10,16 +9,14 @@ database:
     - createdb shotcharter_go_test
     - psql shotcharter_go_test -f db/schema_setup.sql
 dependencies:
-  pre:
+  override:
     - sudo add-apt-repository ppa:masterminds/glide -y
     - sudo apt-get update
     - sudo apt-get install glide -y
-  override:
-    - mkdir -p "$IMPORT_PATH"
-    - ln -sf "$HOME/$CIRCLE_PROJECT_REPONAME/" "$APP_PATH"
-    - cd "$APP_PATH" && glide install
-  post:
-    - go version
 test:
+  pre:
+    - mkdir -p "$IMPORT_PATH"
+    - ln -sf "$(pwd)" "$APP_PATH"
+    - cd "$APP_PATH" && glide install
   override:
     - cd "$APP_PATH" && go test -v $(glide novendor)
