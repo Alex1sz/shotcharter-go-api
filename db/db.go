@@ -9,7 +9,7 @@ import (
 
 func getDbConnectionStr() string {
 	if configor.ENV() == "test" {
-		return "dbname=shotcharter_go_test host=localhost sslmode=verify-full"
+		return "dbname=shotcharter_go_test host=localhost sslmode=disable"
 	}
 	return "dbname=shotcharter_go_development host=localhost sslmode=disable"
 }
