@@ -13,4 +13,4 @@ dependencies:
     - glide install
 test:
   override:
-    - cd "$APP_PATH" && go test -v $(glide novendor)
+    - go test -v $(glide novendor)
