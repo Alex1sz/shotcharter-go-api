@@ -1,5 +1,5 @@
 hash: 07cd168e22def1d5124b8c7971b4d687a85324f37c1f6a412b1c144dcf2edac2
-updated: 2017-05-16T13:52:50.288468193-07:00
+updated: 2017-05-17T12:50:09.297124524-07:00
 imports:
 - name: github.com/alex1sz/configor
   version: 0f6b3a6e1f2b56631eb2a5a063c0a05ca245cba0
@@ -17,4 +17,6 @@ imports:
   - oid
 - name: github.com/urfave/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+- name: gopkg.in/yaml.v2
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []
