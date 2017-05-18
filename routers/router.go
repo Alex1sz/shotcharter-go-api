@@ -6,7 +6,7 @@ import (
 )
 
 var secureMiddleware = secure.New(secure.Options{
-	SSLRedirect:        true,
+	// SSLRedirect:        true,
 	FrameDeny:          true,
 	ContentTypeNosniff: true,
 	BrowserXssFilter:   true,
