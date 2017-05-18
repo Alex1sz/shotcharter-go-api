@@ -1,11 +1,11 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/alex1sz/shotcharter-go-api/db"
 	"github.com/alex1sz/shotcharter-go-api/routers"
-	"github.com/codegangsta/negroni"
-	"github.com/unrolled/secure"
+	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 	"os"
@@ -16,20 +16,16 @@ func main() {
 	db.Db.Ping()
 	port := ":" + os.Getenv("PORT")
 	router := routers.InitRoutes()
-
-	secureMiddleware := secure.New(secure.Options{
-		FrameDeny:          true,
-		ContentTypeNosniff: true,
-		BrowserXssFilter:   true,
-	})
-	n := negroni.Classic()
-
-	n.Use(negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext))
-	n.UseHandler(router)
+	cert := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist(os.Getenv("HOST")),
+		Cache:      autocert.DirCache("certs"),
+	}
 
 	server := &http.Server{
-		Handler: n,
-		Addr:    port,
+		Handler:   router,
+		Addr:      port,
+		TLSConfig: &tls.Config{GetCertificate: cert.GetCertificate},
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,

@@ -1,5 +1,5 @@
-hash: 75f2ee0f1db912d0f623ab282c9e093a240cbd6f14eca114cf7c8703e7d5324c
-updated: 2017-05-17T16:12:36.799276959-07:00
+hash: 815a4c036dcfbe3e1f2ccac5fd62d29416ad2ebcc67f24aecd7b4ae59cb1b95d
+updated: 2017-05-17T18:11:23.401852952-07:00
 imports:
 - name: github.com/alex1sz/configor
   version: 0f6b3a6e1f2b56631eb2a5a063c0a05ca245cba0
@@ -19,6 +19,11 @@ imports:
   version: 703a2422bdf02f9a4788539f7d23390a14197abb
 - name: github.com/urfave/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+- name: golang.org/x/crypto
+  version: 0fe963104e9d1877082f8fb38f816fcd97eb1d10
+  subpackages:
+  - acme
+  - acme/autocert
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []
