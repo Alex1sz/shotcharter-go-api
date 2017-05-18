@@ -10,7 +10,10 @@ func SetTeamRoutes(router *mux.Router) *mux.Router {
 	teamRouter := mux.NewRouter()
 	teamRouter.HandleFunc("/teams", controllers.CreateTeam).Methods("POST")
 	teamRouter.HandleFunc("/teams/{id}", controllers.GetTeamByID).Methods("GET")
-	router.PathPrefix("/teams").Handler(negroni.New(negroni.Wrap(teamRouter)))
+	router.PathPrefix("/teams").Handler(negroni.New(
+		negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext),
+		negroni.Wrap(teamRouter),
+	))
 
 	return router
 }
