@@ -5,7 +5,6 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/utilities"
 	"github.com/gorilla/mux"
-	// "log"
 	"net/http"
 )
 
@@ -26,6 +25,24 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 func GetTeamByID(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	team, err := models.FindTeamByID(params["id"])
+
+	if err != nil {
+		utils.HandleFindError(w, err)
+		return
+	}
+	utils.RespondWithJSON(w, team)
+}
+
+// PATCH /teams/:id
+func Update(w http.ResponseWriter, req *http.Request) {
+	var team models.Team
+	err := json.NewDecoder(req.Body).Decode(&team)
+
+	if err != nil {
+		utils.RespondWithAppError(w, err, "Invalid team data", 500)
+		return
+	}
+	err = team.Update()
 
 	if err != nil {
 		utils.HandleFindError(w, err)

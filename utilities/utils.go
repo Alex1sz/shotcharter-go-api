@@ -24,7 +24,7 @@ func RespondWithAppError(w http.ResponseWriter, handlerError error, message stri
 		Message:    message,
 		HttpStatus: statusCode,
 	}
-	log.Printf("AppError]: %s\n", handlerError)
+	log.Printf("AppError: %s\n", handlerError)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(statusCode)
@@ -36,7 +36,7 @@ func RespondWithAppError(w http.ResponseWriter, handlerError error, message stri
 
 // HandleFindError responds when error occurs in FindByID methods
 func HandleFindError(w http.ResponseWriter, err error) {
-	if err == sql.ErrNoRows {
+	if err == sql.ErrNoRows || err.Error() == "resource not found" {
 		RespondWithAppError(w, err, "Error not found", 404)
 	} else {
 		RespondWithAppError(w, err, "An unexpected error has occurred", 500)

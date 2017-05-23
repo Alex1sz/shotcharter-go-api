@@ -4,7 +4,6 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
-	// "log"
 	"testing"
 )
 
@@ -25,6 +24,23 @@ func TestTeamCreate(t *testing.T) {
 	}
 	if err != nil {
 		t.Error("Team Create() returns error")
+	}
+}
+
+func TestTeamUpdate(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	// reset team name post create
+	team.Name = "Alex's Test Team"
+	team.Update()
+
+	teamAfterUpdate, err := models.FindTeamByID(team.ID)
+
+	if err != nil {
+		t.Error("TestTeamUpdate() failed, error on FindTeamByID")
+	}
+
+	if teamAfterUpdate.Name != team.Name {
+		t.Error("team Update() failed. Expected team name to be: Alex's Test Team, Got: %s", teamAfterUpdate.Name)
 	}
 }
 
