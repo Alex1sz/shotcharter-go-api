@@ -17,6 +17,15 @@ func (team *Team) Create() (err error) {
 	return
 }
 
+func (team *Team) Update() (err error) {
+	_, err = db.Db.Exec("UPDATE teams SET (name) VALUES($1) where (id) VALUES($2) returning id", team.Name, team.ID)
+
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (team *Team) GetPlayers() {
 	players := []*Player{}
 	db.Db.Select(&players, "SELECT id, name AS full_name, active, jersey_number, created_at, updated_at from players where team_id = $1", &team.ID)

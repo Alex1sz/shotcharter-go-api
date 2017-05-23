@@ -28,6 +28,18 @@ func TestTeamCreate(t *testing.T) {
 	}
 }
 
+func TestTeamUpdate(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	teamCopy := team
+
+	team.Name = "Alex's Test Team"
+	team.Update()
+
+	if team.Name == teamCopy.Name {
+		t.Error("team Update() failed. Expected Update() to update team's name")
+	}
+}
+
 func TestPlayerCreate(t *testing.T) {
 	team := test_helper.CreateTestTeam()
 
