@@ -114,7 +114,41 @@ func TestCreateTeam(t *testing.T) {
 		t.Error(err)
 	}
 	if response.StatusCode != 200 {
-		t.Errorf("Success Expected: %d", response.StatusCode)
+		t.Errorf("Success Expected, got: %d", response.StatusCode)
+	}
+}
+
+// PATCH /teams/:id
+func TestSuccesfullyUpdatesTeam(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	team.Name = "Donny Trump's Low T"
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 200 {
+		t.Errorf("Expected 200, got: %d", response.StatusCode)
+	}
+}
+
+// PATCH /teams/:id
+func TestUpdateTeamRespondsWith500(t *testing.T) {
+	team := models.Team{ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11", Name: "Daffy Duck"}
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error("Error marshaling request json")
+	}
+	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if response.StatusCode != 404 {
+		t.Errorf("Expected 404, got: %d", response.StatusCode)
 	}
 }
 
