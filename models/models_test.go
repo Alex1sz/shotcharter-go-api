@@ -40,7 +40,7 @@ func TestTeamUpdate(t *testing.T) {
 	}
 
 	if teamAfterUpdate.Name != team.Name {
-		t.Error("team Update() failed. Expected team name to be: Alex's Test Team, Got: %s", teamAfterUpdate.Name)
+		t.Errorf("team Update() failed. Expected team name to be: Alex's Test Team, Got: %s", teamAfterUpdate.Name)
 	}
 }
 
