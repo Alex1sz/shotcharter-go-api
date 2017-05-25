@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/alex1sz/shotcharter-go-api/db"
 	"github.com/alex1sz/shotcharter-go-api/routers"
 	"golang.org/x/crypto/acme/autocert"
 	"log"
@@ -13,7 +12,6 @@ import (
 )
 
 func main() {
-	db.Db.Ping()
 	port := ":" + os.Getenv("PORT")
 	router := routers.InitRoutes()
 	cert := autocert.Manager{

@@ -27,6 +27,7 @@ func (conf *Config) setDbConnectionStr() {
 }
 
 func (conf *Config) GetConfig() {
+	conf.DB.Driver = "postgres"
 	if len(conf.DB.Connection) < 5 {
 		conf.Environment = configor.ENV()
 		conf.setDbConnectionStr()
