@@ -1,6 +1,7 @@
 package models_test
 
 import (
+	"database/sql"
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/rand"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
@@ -13,6 +14,12 @@ func isPresent(attribute interface{}) bool {
 		return true
 	}
 	return false
+}
+
+// test helper for repeated RowExists queries
+func setupRowExistsTest(tableStr string, idStr string) (existsBool bool, err error) {
+	existsBool, err = models.RowExists("SELECT 1 from ($1) WHERE id=$2", tableStr, idStr)
+	return
 }
 
 func TestTeamCreate(t *testing.T) {
@@ -137,5 +144,30 @@ func TestGameIsValid(t *testing.T) {
 	}
 	if err == nil {
 		t.Error("Expected: 'Invalid game HomeTeam.ID cannot be AwayTeam.ID'")
+	}
+}
+
+func TestRowExistsReturnsTrueWhenRowIsPresent(t *testing.T) {
+	team := test_helper.CreateTestTeam()
+	teamExistsBool, err := models.RowExists("SELECT 1 from teams WHERE id=$1", team.ID)
+
+	if err != nil {
+		t.Errorf("expected resource to be found, got: %v", err.Error())
+	}
+	// expect team exists bool to be true
+	if !teamExistsBool {
+		t.Error("expected teamExistsBool to be true, got false")
+	}
+}
+
+func TestRowExistWhenRowNotPresent(t *testing.T) {
+	teamExistsBool, err := models.RowExists("SELECT 1 from teams where id=$1", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11")
+
+	if err != sql.ErrNoRows {
+		t.Errorf("expected err sql.ErrNoRows, got %s", err.Error())
+	}
+
+	if teamExistsBool {
+		t.Error("RowExists failed: bogus ID used expected bool to be false")
 	}
 }
