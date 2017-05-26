@@ -25,6 +25,8 @@ test:
     - echo $GOPATH
     - echo $PROJECT_PARENT_PATH
     - echo $PROJECT_PATH
+    - go version
+    - go list
     - go build -v
   override:
     - cd "$PROJECT_PATH" && go test $(glide novendor)
