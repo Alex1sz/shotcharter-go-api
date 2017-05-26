@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
+	// "fmt"
 	"github.com/alex1sz/shotcharter-go-api/routers"
 	"golang.org/x/crypto/acme/autocert"
 	"log"
@@ -29,6 +29,6 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	fmt.Printf("Now listening on port %s", port)
+	// fmt.Printf("Now listening on port %s", port)
 	log.Fatal(server.ListenAndServe())
 }

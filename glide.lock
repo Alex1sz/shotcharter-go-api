@@ -1,14 +1,12 @@
-hash: 815a4c036dcfbe3e1f2ccac5fd62d29416ad2ebcc67f24aecd7b4ae59cb1b95d
-updated: 2017-05-17T18:11:23.401852952-07:00
+hash: 17623f39616f0b9360daf1210dc838b2ef82de82696e26c4ca761fddbb6f798c
+updated: 2017-05-26T13:23:36.106614203-07:00
 imports:
-- name: github.com/alex1sz/configor
-  version: 0f6b3a6e1f2b56631eb2a5a063c0a05ca245cba0
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
   version: 392c28fe23e1c45ddba891b0320b3b5df220beea
 - name: github.com/jmoiron/sqlx
-  version: 3564e3a314b957a161fefa0e7aea85b4d741c94e
+  version: d9bd385d68c068f1fabb5057e3dedcbcbb039d0f
   subpackages:
   - reflectx
 - name: github.com/lib/pq
@@ -20,10 +18,8 @@ imports:
 - name: github.com/urfave/negroni
   version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
 - name: golang.org/x/crypto
-  version: 0fe963104e9d1877082f8fb38f816fcd97eb1d10
+  version: 7e9105388ebff089b3f99f0ef676ea55a6da3a7e
   subpackages:
   - acme
   - acme/autocert
-- name: gopkg.in/yaml.v2
-  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []
