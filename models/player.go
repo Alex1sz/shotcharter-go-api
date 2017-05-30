@@ -10,7 +10,7 @@ type Player struct {
 	ID           string `db:"id" json:"id"`
 	Name         string `db:"full_name" json:"name,omitempty"`
 	Active       bool   `db:"active" json:"active,omitempty"`
-	JerseyNumber int64  `db:"jersey_number" json:"jersey_number,omitempty"`
+	JerseyNumber uint8  `db:"jersey_number" json:"jersey_number,omitempty"`
 	Team         Team   `db:"team" json:"team"`
 	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
 	CreatedAt string `db:"created_at" json:"created_at,omitempty"`
@@ -22,7 +22,7 @@ func (player *Player) Create() (err error) {
 		err = errors.New("Team not found")
 		return
 	}
-	err = db.Db.QueryRow("insert into players (name, active, jersey_number, team_id) values ($1, $2, $3, $4) returning id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
+	err = db.Db.QueryRow("INSERT INTO players (name, active, jersey_number, team_id) VALUES ($1, $2, $3, $4) RETURNING id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
 
 	if err != nil {
 		return
@@ -31,6 +31,6 @@ func (player *Player) Create() (err error) {
 }
 
 func (player Player) IsValid() (bool, error) {
-	teamExistsBool, err := RowExists("select 1 from teams WHERE id=$1", player.Team.ID)
+	teamExistsBool, err := RowExists("SELECT 1 FROM teams WHERE id=$1", player.Team.ID)
 	return teamExistsBool, err
 }

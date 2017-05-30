@@ -24,7 +24,7 @@ type Game struct {
 }
 
 func (game *Game) Create() (err error) {
-	err = db.Db.QueryRow("insert into games (home_team_id, away_team_id) values ($1, $2) returning id", game.HomeTeam.ID, game.AwayTeam.ID).Scan(&game.ID)
+	err = db.Db.QueryRow("INSERT INTO games (home_team_id, away_team_id) VALUES ($1, $2) RETURNING id", game.HomeTeam.ID, game.AwayTeam.ID).Scan(&game.ID)
 	return
 }
 
@@ -51,7 +51,6 @@ func FindGameByID(id string) (game Game, err error) {
 		return
 	}
 	game.GetShots()
-
 	return
 }
 
