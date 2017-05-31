@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/alex1sz/configor"
 	"os"
+	"regexp"
 )
 
 type Config struct {
@@ -26,10 +26,39 @@ func (conf *Config) setDbConnectionStr() {
 	return
 }
 
+func matchTestStr() string {
+	isTest, _ := regexp.MatchString("/_test/", os.Args[0])
+
+	if isTest {
+		return "test"
+	}
+	return ""
+}
+
+// GetEnvironment returns configor.Environment str
+func (config *Config) getEnvironment() {
+	if config.Environment != "" {
+		return
+	}
+	isTestStr := matchTestStr()
+	envStrings := []string{os.Getenv("CONFIGOR_ENV"), isTestStr, "development"}
+
+	for _, envStr := range envStrings {
+		if envStr != "" {
+			config.Environment = envStr
+			break
+		}
+	}
+	return
+}
+
 func (conf *Config) GetConfig() {
+	if len(conf.Environment) < 1 {
+		conf.getEnvironment()
+	}
+
 	conf.DB.Driver = "postgres"
 	if len(conf.DB.Connection) < 5 {
-		conf.Environment = configor.ENV()
 		conf.setDbConnectionStr()
 		return
 	}
