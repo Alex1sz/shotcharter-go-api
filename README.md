@@ -1,6 +1,5 @@
 ## Build
-![alt text](https://travis-ci.org/Alex1sz/shotcharter-go-api.svg?branch=master "Build status")
-
+[![Build Status](https://travis-ci.org/Alex1sz/shotcharter-go-api.svg?branch=master)](https://travis-ci.org/Alex1sz/shotcharter-go-api)
 
 ## Dev environment setup
 
