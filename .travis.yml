@@ -3,10 +3,11 @@ go:
   - 1.8.x
 install:
   - go get github.com/Masterminds/glide
+  - cd $GOPATH/src/github.com/Masterminds/glide && git checkout 4b407b34822cd21100f0b12f14a00eec21867166 && go install && cd -
+  - glide install
 
 before_script:
   - psql -c 'create database shotcharter_go_test;' -U postgres
   - psql shotcharter_go_test -f db/schema_setup.sql
 script:
-  - $GOPATH/bin/glide install
-  - go test $($GOPATH/bin/glide novendor)
+  - go test $(glide novendor)
