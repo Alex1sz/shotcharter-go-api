@@ -1,0 +1,12 @@
+language: go
+go:
+  - 1.8.x
+install:
+  - go get github.com/Masterminds/glide
+
+before_script:
+  - psql -c 'create database shotcharter_go_test;' -U postgres
+  - psql shotcharter_go_test -f db/schema_setup.sql
+script:
+  - $GOPATH/bin/glide install
+  - go test $($GOPATH/bin/glide novendor)
