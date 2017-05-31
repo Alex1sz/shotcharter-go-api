@@ -1,6 +1,7 @@
 language: go
 go:
   - 1.8.x
+go_import_path: github.com/alex1sz/shotcharter-go-api
 install:
   - go get github.com/Masterminds/glide
   - cd $GOPATH/src/github.com/Masterminds/glide && git checkout 4b407b34822cd21100f0b12f14a00eec21867166 && go install && cd -
