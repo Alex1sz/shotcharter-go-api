@@ -44,9 +44,7 @@ func (game *Game) GetShots() {
 }
 
 func FindGameByID(id string) (game Game, err error) {
-	err = db.Db.Get(&game, `SELECT games.id as id, games.home_score, games.away_score, games.home_team_id "home_team.id", home_team.name "home_team.name", games.away_team_id "away_team.id", away_team.name "away_team.name" FROM games INNER JOIN teams AS home_team ON (games.home_team_id = home_team.id) INNER JOIN teams AS away_team ON (games.away_team_id = away_team.id) WHERE games.id = $1`, id)
-
-	if err != nil {
+	if err = db.Db.Get(&game, `SELECT games.id as id, games.home_score, games.away_score, games.home_team_id "home_team.id", home_team.name "home_team.name", games.away_team_id "away_team.id", away_team.name "away_team.name" FROM games INNER JOIN teams AS home_team ON (games.home_team_id = home_team.id) INNER JOIN teams AS away_team ON (games.away_team_id = away_team.id) WHERE games.id = $1`, id); err != nil {
 		return
 	}
 	game.GetShots()
