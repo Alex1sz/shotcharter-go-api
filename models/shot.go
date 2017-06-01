@@ -47,8 +47,8 @@ func (shot Shot) IsValid() (playerIsOnTeam bool) {
     SELECT 1 FROM players
     WHERE EXISTS(
       SELECT 1 FROM games
-      WHERE players.team_id = games.home_team_id OR players.team_id = games.away_team_id)
-    AND id=$1 AND team_id=$2`, shot.Player.ID, shot.Team.ID)
+      WHERE players.team_id = games.home_team_id OR players.team_id = games.away_team_id AND games.id = $3)
+    AND id=$1 AND team_id=$2`, shot.Player.ID, shot.Team.ID, shot.Game.ID)
 
 	if err != nil || !playerIsOnTeam {
 		return false
