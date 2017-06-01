@@ -10,9 +10,7 @@ import (
 // POST /players
 func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 	var player models.Player
-	err := json.NewDecoder(req.Body).Decode(&player)
-
-	if err != nil {
+	if err := json.NewDecoder(req.Body).Decode(&player); err != nil {
 		utils.RespondWithAppError(w, err, "Invalid player data", 500)
 		return
 	}

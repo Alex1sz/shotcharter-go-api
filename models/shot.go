@@ -37,7 +37,7 @@ func (shot *Shot) Update() (err error) {
     WHERE id = ($1) RETURNING id`, shot.ID, shot.Player.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&result)
 
 	if result != shot.ID && err == nil {
-		err = errors.New("result is not equal to shot.ID")
+		return errors.New("Shot update failed: result not equal to shot.ID")
 	}
 	return
 }

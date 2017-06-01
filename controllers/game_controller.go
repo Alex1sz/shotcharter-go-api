@@ -23,15 +23,11 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 // POST /games
 func CreateGame(w http.ResponseWriter, req *http.Request) {
 	var game models.Game
-	err := json.NewDecoder(req.Body).Decode(&game)
-
-	if err != nil {
+	if err := json.NewDecoder(req.Body).Decode(&game); err != nil {
 		utils.RespondWithAppError(w, err, "Invalid team data", 500)
 		return
 	}
-	err = game.Create()
-
-	if err != nil {
+	if err := game.Create(); err != nil {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}

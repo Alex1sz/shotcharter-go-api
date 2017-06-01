@@ -19,15 +19,9 @@ type Player struct {
 
 func (player *Player) Create() (err error) {
 	if &player.Team == nil {
-		err = errors.New("Team not found")
-		return
+		return errors.New("Team not found")
 	}
-	err = db.Db.QueryRow("INSERT INTO players (name, active, jersey_number, team_id) VALUES ($1, $2, $3, $4) RETURNING id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
-
-	if err != nil {
-		return
-	}
-	return
+	return db.Db.QueryRow("INSERT INTO players (name, active, jersey_number, team_id) VALUES ($1, $2, $3, $4) RETURNING id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
 }
 
 func (player Player) IsValid() (bool, error) {

@@ -24,8 +24,7 @@ func (team *Team) Update() (err error) {
 	teamExistsBool, err := RowExists("SELECT 1 from teams WHERE id=$1", team.ID)
 
 	if !teamExistsBool || err != nil {
-		err = errors.New("resource not found")
-		return
+		return errors.New("resource not found")
 	}
 	_, err = db.Db.Exec(`UPDATE teams SET name = ($1) WHERE id = ($2)`, team.Name, team.ID)
 	return
