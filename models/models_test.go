@@ -203,3 +203,43 @@ func TestPlayerIsValidWhenInvalid(t *testing.T) {
 		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
 	}
 }
+
+func TestShotIsValidReturnsFalseWhenInvalid(t *testing.T) {
+	player := test_helper.CreateTestPlayer()
+	gameNotAssociatedToPlayer := test_helper.CreateTestGame()
+
+	shot := models.Shot{
+		Player:  player,
+		Team:    player.Team,
+		Game:    gameNotAssociatedToPlayer,
+		PtValue: 2,
+		Made:    true,
+		XAxis:   100,
+		YAxis:   300,
+	}
+	validBool := shot.IsValid()
+
+	if validBool {
+		t.Errorf("shot.IsValid() expected: false, got: true")
+	}
+}
+
+func TestShotCreateWillNotCreateInvalidShot(t *testing.T) {
+	player := test_helper.CreateTestPlayer()
+	gameNotAssociatedToPlayer := test_helper.CreateTestGame()
+
+	shot := models.Shot{
+		Player:  player,
+		Team:    player.Team,
+		Game:    gameNotAssociatedToPlayer,
+		PtValue: 2,
+		Made:    true,
+		XAxis:   100,
+		YAxis:   300,
+	}
+	err := shot.Create()
+
+	if err == nil || !isPresent(shot.ID) {
+		t.Errorf("expect err or zero value id when shot is invalid")
+	}
+}
