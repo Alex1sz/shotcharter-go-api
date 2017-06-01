@@ -5,19 +5,27 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/utilities"
 	"github.com/gorilla/mux"
+	// "log"
 	"net/http"
 )
 
-// POST /teams
-func CreateTeam(w http.ResponseWriter, req *http.Request) {
-	var team models.Team
-	err := json.NewDecoder(req.Body).Decode(&team)
-
-	if err != nil {
+// team specific decoder needed to avoid performance hit of using reflect
+func decodeReqIntoTeam(w http.ResponseWriter, req *http.Request) (team models.Team) {
+	if err := json.NewDecoder(req.Body).Decode(&team); err != nil {
 		utils.RespondWithAppError(w, err, "Invalid team data", 500)
 		return
 	}
-	team.Create()
+	return
+}
+
+// POST /teams
+func CreateTeam(w http.ResponseWriter, req *http.Request) {
+	team := decodeReqIntoTeam(w, req)
+
+	if err := team.Create(); err != nil {
+		utils.RespondWithAppError(w, err, "Unexpected error", 500)
+		return
+	}
 	utils.RespondWithJSON(w, team, 201)
 }
 
@@ -35,16 +43,9 @@ func GetTeamByID(w http.ResponseWriter, req *http.Request) {
 
 // PATCH /teams/:id
 func UpdateTeam(w http.ResponseWriter, req *http.Request) {
-	var team models.Team
-	err := json.NewDecoder(req.Body).Decode(&team)
+	team := decodeReqIntoTeam(w, req)
 
-	if err != nil {
-		utils.RespondWithAppError(w, err, "Invalid team data", 500)
-		return
-	}
-	err = team.Update()
-
-	if err != nil {
+	if err := team.Update(); err != nil {
 		utils.HandleFindError(w, err)
 		return
 	}

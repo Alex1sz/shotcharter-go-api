@@ -13,9 +13,11 @@ type Team struct {
 	Games   []Game    `json:"games,omitempty"`
 }
 
-func (team *Team) Create() (err error) {
-	err = db.Db.QueryRow("INSERT INTO teams (name) VALUES ($1) RETURNING id", team.Name).Scan(&team.ID)
-	return
+func (team *Team) Create() error {
+	if !team.IsValid() {
+		return errors.New("Team is invalid: name must be present")
+	}
+	return db.Db.QueryRow("INSERT INTO teams (name) VALUES ($1) RETURNING id", team.Name).Scan(&team.ID)
 }
 
 func (team *Team) Update() (err error) {
@@ -38,9 +40,7 @@ func (team *Team) GetPlayers() {
 }
 
 func FindTeamByID(id string) (team Team, err error) {
-	err = db.Db.Get(&team, "SELECT id, name FROM teams WHERE id = $1", id)
-
-	if err != nil {
+	if err = db.Db.Get(&team, "SELECT id, name FROM teams WHERE id = $1", id); err != nil {
 		return
 	}
 	team.GetPlayers()
@@ -53,6 +53,13 @@ func (team Team) PlayerIsOnTeam(player Player) bool {
 			// player found
 			return true
 		}
+	}
+	return false
+}
+
+func (team Team) IsValid() bool {
+	if team.Name != "" {
+		return true
 	}
 	return false
 }

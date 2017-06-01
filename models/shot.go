@@ -3,13 +3,12 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
-	// "log"
 )
 
 type Shot struct {
 	ID        string `db:"id" json:"id"`
 	Player    Player `db:"player" json:"player,omitempty"`
-	Game      Game   `db:"game" json:"-"`
+	Game      Game   `db:"game" json:"game"`
 	Team      Team   `db:"team" json:"team,omitempty"`
 	PtValue   uint8  `db:"pt_value" json:"pt_value"`
 	Made      bool   `db:"made" json:"made"`
@@ -19,10 +18,11 @@ type Shot struct {
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
 
-func (shot *Shot) Create() (err error) {
-	err = db.Db.QueryRow("INSERT INTO shots (player_id, game_id, team_id, pt_value, made, x_axis, y_axis) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", shot.Player.ID, shot.Game.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&shot.ID)
-
-	return
+func (shot *Shot) Create() error {
+	if !shot.IsValid() {
+		return errors.New("Shot is invalid")
+	}
+	return db.Db.QueryRowx("INSERT INTO shots (player_id, game_id, team_id, pt_value, made, x_axis, y_axis) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", shot.Player.ID, shot.Game.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&shot.ID)
 }
 
 func (shot *Shot) Update() (err error) {
@@ -42,11 +42,11 @@ func (shot *Shot) Update() (err error) {
 	return
 }
 
-func (shot Shot) IsValid() (playerIsOnTeam bool, err error) {
-	playerIsOnTeam, err = RowExists("SELECT 1 FROM players WHERE id=$1 AND team_id=$2", shot.Player.ID, shot.Team.ID)
+func (shot Shot) IsValid() (playerIsOnTeam bool) {
+	playerIsOnTeam, err := RowExists("SELECT 1 FROM players WHERE id=$1 AND team_id=$2", shot.Player.ID, shot.Team.ID)
 
 	if err != nil || !playerIsOnTeam {
-		return
+		return false
 	}
-	return true, err
+	return true
 }

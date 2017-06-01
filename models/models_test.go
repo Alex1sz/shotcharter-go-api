@@ -84,7 +84,7 @@ func TestShotCreate(t *testing.T) {
 		t.Error("Shot Create() failed: shot.ID not present")
 	}
 	if err != nil {
-		t.Error("shot Create() returns err")
+		t.Errorf("shot Create() returns err: %s", err.Error())
 	}
 }
 

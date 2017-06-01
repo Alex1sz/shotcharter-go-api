@@ -58,7 +58,7 @@ func TestCreateGame(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success expected: %d", response.StatusCode)
 	}
 }
@@ -95,7 +95,7 @@ func TestCreatePlayer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
 }
@@ -113,8 +113,26 @@ func TestCreateTeam(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success Expected, got: %d", response.StatusCode)
+	}
+}
+
+// POST /teams
+func TestCreateTeamWithInvalidTeam(t *testing.T) {
+	team := models.Game{}
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("POST", fmt.Sprintf("%s/teams", serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 500 {
+		t.Errorf("Expected 500, got: %d", response.StatusCode)
 	}
 }
 
@@ -173,20 +191,22 @@ func TestGetTeamByID(t *testing.T) {
 // POST /shots
 func TestCreateShot(t *testing.T) {
 	player := test_helper.CreateTestPlayer()
-	shot := models.Shot{Player: player, Team: player.Team, PtValue: 2, Made: true, XAxis: 320, YAxis: 200}
+	game := models.Game{HomeTeam: player.Team, AwayTeam: test_helper.CreateTestTeam()}
+	game.Create()
 
+	shot := models.Shot{Player: models.Player{ID: player.ID}, Game: game, Team: models.Team{ID: player.Team.ID}, PtValue: 3, XAxis: 312, YAxis: 250}
 	requestJSON, err := json.Marshal(shot)
 
 	if err != nil {
-		t.Error(err)
+		t.Errorf("TestCreateShot returns err: %s", err.Error())
 	}
 	response, err := MakeRequest("POST", fmt.Sprintf("%s/shots", serverURL), strings.NewReader(string(requestJSON)))
 
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
-		t.Errorf("Success Expected: %d", response.StatusCode)
+	if response.StatusCode != 201 {
+		t.Errorf("Expected 201 got: %d", response.StatusCode)
 	}
 }
 
