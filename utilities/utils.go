@@ -45,7 +45,7 @@ func HandleFindError(w http.ResponseWriter, err error) {
 }
 
 // abstracts out shared marshaling of responseJSON, err handling, setting of headers
-func RespondWithJSON(w http.ResponseWriter, modelObj interface{}) {
+func RespondWithJSON(w http.ResponseWriter, modelObj interface{}, statusCode int) {
 	jsonResp, err := json.Marshal(modelObj)
 
 	if err != nil {

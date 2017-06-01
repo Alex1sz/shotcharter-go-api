@@ -17,7 +17,7 @@ func GetGameByID(w http.ResponseWriter, req *http.Request) {
 		utils.HandleFindError(w, err)
 		return
 	}
-	utils.RespondWithJSON(w, game)
+	utils.RespondWithJSON(w, game, 200)
 }
 
 // POST /games
@@ -35,5 +35,5 @@ func CreateGame(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}
-	utils.RespondWithJSON(w, game)
+	utils.RespondWithJSON(w, game, 201)
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
 	// "log"
 )
@@ -10,7 +11,7 @@ type Shot struct {
 	Player    Player `db:"player" json:"player,omitempty"`
 	Game      Game   `db:"game" json:"-"`
 	Team      Team   `db:"team" json:"team,omitempty"`
-	PtValue   uint64 `db:"pt_value" json:"pt_value"`
+	PtValue   uint8  `db:"pt_value" json:"pt_value"`
 	Made      bool   `db:"made" json:"made"`
 	XAxis     uint64 `db:"x_axis" json:"x_axis"`
 	YAxis     uint64 `db:"y_axis" json:"y_axis"`
@@ -21,6 +22,23 @@ type Shot struct {
 func (shot *Shot) Create() (err error) {
 	err = db.Db.QueryRow("INSERT INTO shots (player_id, game_id, team_id, pt_value, made, x_axis, y_axis) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", shot.Player.ID, shot.Game.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&shot.ID)
 
+	return
+}
+
+func (shot *Shot) Update() (err error) {
+	var result string
+	err = db.Db.QueryRowx(`UPDATE shots SET
+    player_id = ($2),
+    team_id = ($3),
+    pt_value = ($4),
+    made = ($5),
+    x_axis = ($6),
+    y_axis = ($7)
+    WHERE id = ($1) RETURNING id`, shot.ID, shot.Player.ID, shot.Team.ID, shot.PtValue, shot.Made, shot.XAxis, shot.YAxis).Scan(&result)
+
+	if result != shot.ID && err == nil {
+		err = errors.New("result is not equal to shot.ID")
+	}
 	return
 }
 

@@ -18,7 +18,7 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	team.Create()
-	utils.RespondWithJSON(w, team)
+	utils.RespondWithJSON(w, team, 201)
 }
 
 // GET /teams/:id
@@ -30,11 +30,11 @@ func GetTeamByID(w http.ResponseWriter, req *http.Request) {
 		utils.HandleFindError(w, err)
 		return
 	}
-	utils.RespondWithJSON(w, team)
+	utils.RespondWithJSON(w, team, 200)
 }
 
 // PATCH /teams/:id
-func Update(w http.ResponseWriter, req *http.Request) {
+func UpdateTeam(w http.ResponseWriter, req *http.Request) {
 	var team models.Team
 	err := json.NewDecoder(req.Body).Decode(&team)
 
@@ -48,5 +48,5 @@ func Update(w http.ResponseWriter, req *http.Request) {
 		utils.HandleFindError(w, err)
 		return
 	}
-	utils.RespondWithJSON(w, team)
+	utils.RespondWithJSON(w, team, 200)
 }

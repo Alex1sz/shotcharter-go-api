@@ -64,3 +64,12 @@ func CreateTestGameWithShots() (game models.Game) {
 
 	return game
 }
+
+// helper creates test shot
+func CreateTestShot() (shot models.Shot) {
+	player := CreateTestPlayer()
+	shot = models.Shot{Game: CreateTestGameForHomeTeam(player.Team), Team: player.Team, Player: player, PtValue: 2, Made: true, XAxis: 200, YAxis: 300}
+	shot.Create()
+
+	return
+}

@@ -23,5 +23,5 @@ func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.Create()
-	utils.RespondWithJSON(w, player)
+	utils.RespondWithJSON(w, player, 201)
 }
