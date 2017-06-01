@@ -2,27 +2,38 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/utilities"
 	// "log"
-	"github.com/alex1sz/shotcharter-go-api/models"
 	"net/http"
 )
 
-// POST /shots
-func CreateShot(w http.ResponseWriter, req *http.Request) {
-	var shot models.Shot
-	err := json.NewDecoder(req.Body).Decode(&shot)
-
-	if err != nil {
+func decodeReqIntoShot(w http.ResponseWriter, req *http.Request) (shot models.Shot) {
+	if err := json.NewDecoder(req.Body).Decode(&shot); err != nil {
 		utils.RespondWithAppError(w, err, "Invalid shot data", 500)
 		return
 	}
-	shotIsValid, err := shot.IsValid()
+	return
+}
 
-	if !shotIsValid {
-		utils.RespondWithAppError(w, err, "Invalid shot data: see associations", 500)
+// POST /shots
+func CreateShot(w http.ResponseWriter, req *http.Request) {
+	shot := decodeReqIntoShot(w, req)
+
+	if err := shot.Create(); err != nil {
+		utils.RespondWithAppError(w, err, "Unexpected error on create", 500)
 		return
 	}
-	shot.Create()
-	utils.RespondWithJSON(w, shot)
+	utils.RespondWithJSON(w, shot, 201)
+}
+
+// PATCH /shots/:id
+func UpdateShot(w http.ResponseWriter, req *http.Request) {
+	shot := decodeReqIntoShot(w, req)
+
+	if err := shot.Update(); err != nil {
+		utils.HandleFindError(w, err)
+		return
+	}
+	utils.RespondWithJSON(w, shot, 200)
 }

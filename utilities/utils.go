@@ -3,7 +3,7 @@ package utils
 import (
 	"database/sql"
 	"encoding/json"
-	"log"
+	// "log"
 	"net/http"
 )
 
@@ -24,7 +24,6 @@ func RespondWithAppError(w http.ResponseWriter, handlerError error, message stri
 		Message:    message,
 		HttpStatus: statusCode,
 	}
-	log.Printf("AppError: %s\n", handlerError)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(statusCode)
@@ -44,8 +43,8 @@ func HandleFindError(w http.ResponseWriter, err error) {
 	return
 }
 
-// abstracts out shared marshaling of responseJSON, err handling, setting of headers
-func RespondWithJSON(w http.ResponseWriter, modelObj interface{}) {
+// utility marshaling object into json, setting headers, status code
+func RespondWithJSON(w http.ResponseWriter, modelObj interface{}, statusCode int) {
 	jsonResp, err := json.Marshal(modelObj)
 
 	if err != nil {
@@ -53,6 +52,6 @@ func RespondWithJSON(w http.ResponseWriter, modelObj interface{}) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
+	w.WriteHeader(statusCode)
 	w.Write(jsonResp)
 }

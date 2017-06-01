@@ -58,7 +58,7 @@ func TestCreateGame(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success expected: %d", response.StatusCode)
 	}
 }
@@ -71,8 +71,8 @@ func TestGetGameByID(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
 	response, err := MakeRequest("GET", fmt.Sprintf("%s/"+game.ID, requestURL), strings.NewReader(string(gameReqJSON)))
+
 	if err != nil {
 		t.Error(err)
 	}
@@ -95,7 +95,7 @@ func TestCreatePlayer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
 }
@@ -113,8 +113,26 @@ func TestCreateTeam(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
+	if response.StatusCode != 201 {
 		t.Errorf("Success Expected, got: %d", response.StatusCode)
+	}
+}
+
+// POST /teams
+func TestCreateTeamWithInvalidTeam(t *testing.T) {
+	team := models.Game{}
+	requestJSON, err := json.Marshal(team)
+
+	if err != nil {
+		t.Error(err)
+	}
+	response, err := MakeRequest("POST", fmt.Sprintf("%s/teams", serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Error(err)
+	}
+	if response.StatusCode != 500 {
+		t.Errorf("Expected 500, got: %d", response.StatusCode)
 	}
 }
 
@@ -143,7 +161,7 @@ func TestUpdateTeamRespondsWith500(t *testing.T) {
 	requestJSON, err := json.Marshal(team)
 
 	if err != nil {
-		t.Error("Error marshaling request json")
+		t.Error("Error marshaling json")
 	}
 	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
 
@@ -173,20 +191,22 @@ func TestGetTeamByID(t *testing.T) {
 // POST /shots
 func TestCreateShot(t *testing.T) {
 	player := test_helper.CreateTestPlayer()
-	shot := models.Shot{Player: player, Team: player.Team, PtValue: 2, Made: true, XAxis: 320, YAxis: 200}
+	game := models.Game{HomeTeam: player.Team, AwayTeam: test_helper.CreateTestTeam()}
+	game.Create()
 
+	shot := models.Shot{Player: models.Player{ID: player.ID}, Game: game, Team: models.Team{ID: player.Team.ID}, PtValue: 3, XAxis: 312, YAxis: 250}
 	requestJSON, err := json.Marshal(shot)
 
 	if err != nil {
-		t.Error(err)
+		t.Errorf("TestCreateShot returns err: %s", err.Error())
 	}
 	response, err := MakeRequest("POST", fmt.Sprintf("%s/shots", serverURL), strings.NewReader(string(requestJSON)))
 
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
-		t.Errorf("Success Expected: %d", response.StatusCode)
+	if response.StatusCode != 201 {
+		t.Errorf("Expected 201 got: %d", response.StatusCode)
 	}
 }
 
@@ -195,11 +215,8 @@ func TestGetGameByIDForGameWithShots(t *testing.T) {
 	game := test_helper.CreateTestGameWithShots()
 	gameReqJSON, err := json.Marshal(game)
 
-	if err != nil {
-		t.Error(err)
-	}
-
 	response, err := MakeRequest("GET", fmt.Sprintf("%s/"+game.ID, requestURL), strings.NewReader(string(gameReqJSON)))
+
 	if err != nil {
 		t.Error(err)
 	}
@@ -211,5 +228,48 @@ func TestGetGameByIDForGameWithShots(t *testing.T) {
 
 	if len(gameResp.HomeShots) != 1 && len(gameResp.AwayShots) != 1 {
 		t.Error("JSON response does not contain game's shots")
+	}
+}
+
+// PATCH /shots/:id
+func TestUpdateShotWithBadID(t *testing.T) {
+	shot := models.Shot{
+		ID:      "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11",
+		PtValue: 3,
+		Made:    true,
+		XAxis:   200,
+		YAxis:   300,
+		Team: models.Team{
+			ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11",
+		},
+		Player: models.Player{
+			ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11",
+		},
+	}
+	requestJSON, err := json.Marshal(shot)
+
+	if err != nil {
+		t.Error("Error marshaling json")
+	}
+	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/shots/"+shot.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if response.StatusCode != 404 {
+		t.Errorf("Expected 404, got: %d", response.StatusCode)
+	}
+}
+
+// PATCH /shots/:id
+func TestUpdatesShotWhenShotIsValid(t *testing.T) {
+	shot := test_helper.CreateTestShot()
+	shot.XAxis = 100
+	requestJSON, err := json.Marshal(shot)
+
+	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/shots/"+shot.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Errorf("Expected updated shot, got err: %s", err.Error())
+	}
+	if response.StatusCode != 200 {
+		t.Errorf("Expected 200, got: %d", response.StatusCode)
 	}
 }

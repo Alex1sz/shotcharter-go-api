@@ -9,10 +9,10 @@ import (
 func SetShotRoutes(router *mux.Router) *mux.Router {
 	shotRouter := mux.NewRouter()
 	shotRouter.HandleFunc("/shots", controllers.CreateShot).Methods("POST")
+	shotRouter.HandleFunc("/shots/{id}", controllers.UpdateShot).Methods("PATCH")
 	router.PathPrefix("/shots").Handler(negroni.New(
 		negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext),
 		negroni.Wrap(shotRouter),
 	))
-
 	return router
 }
