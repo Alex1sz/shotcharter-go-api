@@ -149,7 +149,7 @@ func TestRowExistsReturnsTrueWhenRowIsPresent(t *testing.T) {
 	}
 }
 
-func TestRowExistWhenRowNoRow(t *testing.T) {
+func TestRowExistWhenNoRow(t *testing.T) {
 	teamExistsBool, err := models.RowExists("SELECT 1 from teams where id=$1", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11")
 
 	if err != sql.ErrNoRows {
@@ -177,5 +177,29 @@ func TestShotUpdateForExistingShot(t *testing.T) {
 				t.Errorf("shot pt_value, made, x_axis, y_axis \n expected to eq %v, %v, %v, %v \n got %v, %v, %v, %v", shot.PtValue, shot.Made, shot.XAxis, shot.YAxis, s.PtValue, s.Made, s.XAxis, s.YAxis)
 			}
 		}
+	}
+}
+
+func TestPlayerIsValid(t *testing.T) {
+	player := models.Player{Name: "Dennis Rodman", Active: true, JerseyNumber: 99, Team: test_helper.CreateTestTeam()}
+
+	validBool, err := player.IsValid()
+
+	if !validBool || err != nil {
+		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
+	}
+}
+
+func TestPlayerIsValidWhenInvalid(t *testing.T) {
+	player := models.Player{
+		Name:         "Dennis Rodman",
+		Active:       true,
+		JerseyNumber: 99,
+		Team:         models.Team{ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"},
+	}
+	validBool, err := player.IsValid()
+
+	if validBool {
+		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
 	}
 }
