@@ -52,6 +52,7 @@ func RespondWithJSON(w http.ResponseWriter, modelObj interface{}, statusCode int
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(statusCode)
 	w.Write(jsonResp)
 }
