@@ -7,7 +7,7 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/routers"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
 	"io"
-	// "log"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -95,6 +95,17 @@ func TestCreatePlayer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	var playerResp models.Player
+	json.NewDecoder(response.Body).Decode(&playerResp)
+
+	if len(playerResp.ID) < 1 {
+		t.Errorf("Expected player.ID in response, got: %s", playerResp.ID)
+	}
+
+	log.Println(playerResp)
+	fmt.Printf("playerID %s", playerResp.ID)
+
 	if response.StatusCode != 201 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
