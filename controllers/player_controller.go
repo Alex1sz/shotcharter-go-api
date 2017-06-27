@@ -14,12 +14,10 @@ func CreatePlayer(w http.ResponseWriter, req *http.Request) {
 		utils.RespondWithAppError(w, err, "Invalid player data", 500)
 		return
 	}
-	playerIsValid, err := player.IsValid()
 
-	if !playerIsValid {
-		utils.RespondWithAppError(w, err, "Invalid player data", 500)
+	if err := player.Create(); err != nil {
+		utils.RespondWithAppError(w, err, err.Error(), 404)
 		return
 	}
-	player.Create()
 	utils.RespondWithJSON(w, player, 201)
 }

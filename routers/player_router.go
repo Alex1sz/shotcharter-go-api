@@ -12,7 +12,7 @@ func SetPlayerRoutes(router *mux.Router) *mux.Router {
 	router.PathPrefix("/players").Handler(negroni.New(
 		negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext),
 		negroni.Wrap(playerRouter),
+		negroni.NewLogger(),
 	))
-
 	return router
 }

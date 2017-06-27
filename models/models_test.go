@@ -183,10 +183,10 @@ func TestShotUpdateForExistingShot(t *testing.T) {
 func TestPlayerIsValid(t *testing.T) {
 	player := models.Player{Name: "Dennis Rodman", Active: true, JerseyNumber: 99, Team: test_helper.CreateTestTeam()}
 
-	validBool, err := player.IsValid()
+	// validBool, err := player.IsValid()
 
-	if !validBool || err != nil {
-		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
+	if err := player.Create(); err != nil {
+		t.Errorf("expected player to be valid got err: %v", err.Error())
 	}
 }
 
@@ -197,10 +197,9 @@ func TestPlayerIsValidWhenInvalid(t *testing.T) {
 		JerseyNumber: 99,
 		Team:         models.Team{ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"},
 	}
-	validBool, err := player.IsValid()
 
-	if validBool {
-		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
+	if err := player.Create(); err == nil {
+		t.Errorf("expected: err player is invalid', got: %v", player.ID)
 	}
 }
 

@@ -21,10 +21,16 @@ func (player *Player) Create() (err error) {
 	if &player.Team == nil {
 		return errors.New("Team not found")
 	}
+	playerValidBool, err := player.isValid()
+
+	if !playerValidBool || err != nil {
+		return errors.New("Invalid player: team not found")
+	}
+
 	return db.Db.QueryRow("INSERT INTO players (name, active, jersey_number, team_id) VALUES ($1, $2, $3, $4) RETURNING id", player.Name, player.Active, player.JerseyNumber, player.Team.ID).Scan(&player.ID)
 }
 
-func (player Player) IsValid() (bool, error) {
+func (player Player) isValid() (bool, error) {
 	teamExistsBool, err := RowExists("SELECT 1 FROM teams WHERE id=$1", player.Team.ID)
 	return teamExistsBool, err
 }
