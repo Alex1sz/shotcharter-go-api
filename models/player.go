@@ -10,7 +10,7 @@ type Player struct {
 	ID           string `db:"id" json:"id"`
 	Name         string `db:"full_name" json:"name,omitempty"`
 	Active       bool   `db:"active" json:"active,omitempty"`
-	JerseyNumber uint8  `db:"jersey_number" json:"jersey_number,omitempty"`
+	JerseyNumber uint8  `db:"jersey_number" json:"jersey_number,omitempty,string"`
 	Team         Team   `db:"team" json:"team"`
 	// Shots        []Shot `db:"shots" json:"shots,omitempty"`
 	CreatedAt string `db:"created_at" json:"created_at,omitempty"`
