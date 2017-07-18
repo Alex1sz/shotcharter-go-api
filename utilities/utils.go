@@ -24,9 +24,7 @@ func RespondWithAppError(w http.ResponseWriter, handlerError error, message stri
 		Message:    message,
 		HttpStatus: statusCode,
 	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(statusCode)
+	setHeaders(w, statusCode)
 
 	if json, err := json.Marshal(errorResource{Data: errorObject}); err == nil {
 		w.Write(json)
@@ -51,8 +49,16 @@ func RespondWithJSON(w http.ResponseWriter, modelObj interface{}, statusCode int
 		RespondWithAppError(w, err, "An unexpected error has occurred", 500)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
+	setHeaders(w, statusCode)
+
+	w.Write(jsonResp)
+}
+
+// utility write headers method
+func setHeaders(w http.ResponseWriter, statusCode int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// temporary allow * while in dev
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(statusCode)
-	w.Write(jsonResp)
+	return
 }
