@@ -205,7 +205,13 @@ func TestCreateShot(t *testing.T) {
 	game := models.Game{HomeTeam: player.Team, AwayTeam: test_helper.CreateTestTeam()}
 	game.Create()
 
-	shot := models.Shot{Player: models.Player{ID: player.ID}, Game: game, Team: models.Team{ID: player.Team.ID}, PtValue: 3, XAxis: 312, YAxis: 250}
+	shot := models.Shot{
+		Player:  models.Player{ID: player.ID},
+		Game:    game,
+		Team:    models.Team{ID: player.Team.ID},
+		PtValue: 3,
+		XAxis:   312,
+		YAxis:   250}
 	requestJSON, err := json.Marshal(shot)
 
 	if err != nil {

@@ -3,12 +3,13 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
+	// "log"
 )
 
 type Shot struct {
 	ID        string `db:"id" json:"id"`
 	Player    Player `db:"player" json:"player,omitempty"`
-	Game      Game   `db:"game" json:"game"`
+	Game      Game   `db:"game" json:"game,omitempty"`
 	Team      Team   `db:"team" json:"team,omitempty"`
 	PtValue   uint8  `db:"pt_value" json:"pt_value"`
 	Made      bool   `db:"made" json:"made"`
@@ -16,6 +17,14 @@ type Shot struct {
 	YAxis     uint64 `db:"y_axis" json:"y_axis"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
+}
+
+type omit *struct{}
+
+type PublicShot struct {
+	*Shot
+	Game omit `json:"game,omitempty"`
+	Team omit `json:"team,omitempty"`
 }
 
 func (shot *Shot) Create() error {

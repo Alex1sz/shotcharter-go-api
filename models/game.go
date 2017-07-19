@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
-	// "log"
 	"time"
 )
 
@@ -21,6 +20,12 @@ type Game struct {
 	AwayTeam  Team     `db:"away_team" json:"away_team"`
 	HomeShots []*Shot  `json:"home_shots,omitempty"`
 	AwayShots []*Shot  `json:"away_shots,omitempty"`
+}
+
+type GameResp struct {
+	*Game
+	HomeShots []PublicShot `json:"home_shots,omitempty"`
+	AwayShots []PublicShot `json:"away_shots,omitempty"`
 }
 
 func (game *Game) Create() (err error) {
