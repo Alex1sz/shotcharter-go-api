@@ -160,13 +160,13 @@ func TestRowExistWhenNoRow(t *testing.T) {
 	}
 }
 
-func TestShotUpdateForExistingShot(t *testing.T) {
+func TestShotUpdate(t *testing.T) {
 	shot := test_helper.CreateTestShot()
 	shot.PtValue, shot.Made, shot.XAxis, shot.YAxis = 3, false, 10, 55
 	err := shot.Update()
 
 	if err != nil {
-		t.Errorf("TestShotUpdateForExistingShot() failed. Update() returns err: %s", err.Error())
+		t.Errorf("TestShotUpdate() failed. Update() returns err: %s", err.Error())
 	}
 	// expect retrieved game HomeShots to contain shot
 	gamePostUpdate, err := models.FindGameByID(shot.Game.ID)
@@ -177,6 +177,28 @@ func TestShotUpdateForExistingShot(t *testing.T) {
 				t.Errorf("shot pt_value, made, x_axis, y_axis \n expected to eq %v, %v, %v, %v \n got %v, %v, %v, %v", shot.PtValue, shot.Made, shot.XAxis, shot.YAxis, s.PtValue, s.Made, s.XAxis, s.YAxis)
 			}
 		}
+	}
+}
+
+// player tests begin
+func TestPlayerUpdate(t *testing.T) {
+	player := test_helper.CreateTestPlayer()
+	player.Name, player.JerseyNumber = "Donald Duck", 1
+
+	err := player.Update()
+
+	if err != nil {
+		t.Errorf("Expected player to update. Update() returns err: %s", err.Error())
+	}
+	// confirm player updated in db
+	updatedPlayer, err := models.FindPlayerByID(player.ID)
+
+	if err != nil {
+		t.Errorf("Expected FindPlayerByID to return player, got err: %s", err.Error())
+	}
+
+	if updatedPlayer.Name != player.Name {
+		t.Errorf("Expected updatedPlayer.Name to eq player.Name, got: %s", updatedPlayer.Name)
 	}
 }
 
