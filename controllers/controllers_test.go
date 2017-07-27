@@ -148,7 +148,7 @@ func TestCreateTeamWithInvalidTeam(t *testing.T) {
 }
 
 // PATCH /teams/:id
-func TestSuccesfullyUpdatesTeam(t *testing.T) {
+func TestTeamUpdate(t *testing.T) {
 	team := test_helper.CreateTestTeam()
 	team.Name = "Donny Trump's Low T"
 	requestJSON, err := json.Marshal(team)
@@ -276,7 +276,8 @@ func TestUpdateShotWithBadID(t *testing.T) {
 }
 
 // PATCH /shots/:id
-func TestUpdatesShotWhenShotIsValid(t *testing.T) {
+// valid shot
+func TestShotUpdate(t *testing.T) {
 	shot := test_helper.CreateTestShot()
 	shot.XAxis = 100
 	requestJSON, err := json.Marshal(shot)
@@ -288,5 +289,28 @@ func TestUpdatesShotWhenShotIsValid(t *testing.T) {
 	}
 	if response.StatusCode != 200 {
 		t.Errorf("Expected 200, got: %d", response.StatusCode)
+	}
+}
+
+// PATCH /players/:id
+func TestPlayerUpdate(t *testing.T) {
+	// valid player
+	player := test_helper.CreateTestPlayer()
+	player.Name = "50 Cent"
+	requestJSON, err := json.Marshal(player)
+
+	resp, err := MakeRequest("PATCH", fmt.Sprintf("%s/players/"+player.ID, serverURL), strings.NewReader(string(requestJSON)))
+
+	if err != nil {
+		t.Errorf("Expected player to update, got err %s", err.Error())
+	}
+	if resp.StatusCode != 201 {
+		t.Errorf("Expected 201, got %d", resp.StatusCode)
+	}
+	var playerResp models.Player
+	err = json.NewDecoder(resp.Body).Decode(&playerResp)
+
+	if playerResp.Name != player.Name {
+		t.Errorf("Expected player response name: %s, got %s", playerResp.Name, player.Name)
 	}
 }
