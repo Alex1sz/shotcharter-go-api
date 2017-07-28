@@ -7,7 +7,6 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/routers"
 	"github.com/alex1sz/shotcharter-go-api/test/helpers/test_helper"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -95,17 +94,12 @@ func TestCreatePlayer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
 	var playerResp models.Player
 	json.NewDecoder(response.Body).Decode(&playerResp)
 
 	if len(playerResp.ID) < 1 {
 		t.Errorf("Expected player.ID in response, got: %s", playerResp.ID)
 	}
-
-	log.Println(playerResp)
-	fmt.Printf("playerID %s", playerResp.ID)
-
 	if response.StatusCode != 201 {
 		t.Errorf("Success Expected: %d", response.StatusCode)
 	}
@@ -125,7 +119,7 @@ func TestCreateTeam(t *testing.T) {
 		t.Error(err)
 	}
 	if response.StatusCode != 201 {
-		t.Errorf("Success Expected, got: %d", response.StatusCode)
+		t.Errorf("Expected 201, got: %d", response.StatusCode)
 	}
 }
 
@@ -156,13 +150,19 @@ func TestTeamUpdate(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	response, err := MakeRequest("PATCH", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
+	resp, err := MakeRequest("PATCH", fmt.Sprintf("%s/teams/"+team.ID, serverURL), strings.NewReader(string(requestJSON)))
 
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 200 {
-		t.Errorf("Expected 200, got: %d", response.StatusCode)
+	if resp.StatusCode != 200 {
+		t.Errorf("Expected 200, got: %d", resp.StatusCode)
+	}
+	var teamResp models.Team
+	err = json.NewDecoder(resp.Body).Decode(&teamResp)
+
+	if teamResp.Name != team.Name {
+		t.Errorf("Expected player response name: %s, got %s", team.Name, teamResp.Name)
 	}
 }
 

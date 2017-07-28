@@ -16,6 +16,11 @@ type Player struct {
 	UpdatedAt string `db:"updated_at" json:"updated_at,omitempty"`
 }
 
+type LeanPlayer struct {
+	*Player
+	Team omit `json:"team,omitempty"`
+}
+
 func (player *Player) Create() (err error) {
 	if &player.Team == nil {
 		return errors.New("Team not found")

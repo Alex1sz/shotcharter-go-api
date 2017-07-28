@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
-	// "log"
 )
 
 type Team struct {
@@ -11,6 +10,12 @@ type Team struct {
 	Name    string    `db:"name" json:"name,omitempty"`
 	Players []*Player `json:"players,omitempty"`
 	Games   []Game    `json:"games,omitempty"`
+}
+
+// for lean team json without redundant nested types
+type TeamResp struct {
+	*Team
+	Players []LeanPlayer `json:"players,omitempty"`
 }
 
 func (team *Team) Create() error {
@@ -49,7 +54,6 @@ func FindTeamByID(id string) (team Team, err error) {
 func (team Team) PlayerIsOnTeam(player Player) bool {
 	for _, player := range team.Players {
 		if player.ID == player.ID {
-			// player found
 			return true
 		}
 	}

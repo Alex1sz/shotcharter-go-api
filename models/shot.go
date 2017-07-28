@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/alex1sz/shotcharter-go-api/db"
-	// "log"
 )
 
 type Shot struct {
