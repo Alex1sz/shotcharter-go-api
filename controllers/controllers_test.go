@@ -58,7 +58,7 @@ func TestCreateGame(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if response.StatusCode != 201 {
+	if response.StatusCode != 200 {
 		t.Errorf("Success expected: %d", response.StatusCode)
 	}
 }
