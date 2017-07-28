@@ -5,7 +5,6 @@ import (
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/utilities"
 	"github.com/gorilla/mux"
-	// "log"
 	"net/http"
 )
 
@@ -31,8 +30,7 @@ func CreateTeam(w http.ResponseWriter, req *http.Request) {
 
 // GET /teams/:id
 func GetTeamByID(w http.ResponseWriter, req *http.Request) {
-	params := mux.Vars(req)
-	team, err := models.FindTeamByID(params["id"])
+	team, err := models.FindTeamByID(mux.Vars(req)["id"])
 
 	if err != nil {
 		utils.HandleFindError(w, err)
