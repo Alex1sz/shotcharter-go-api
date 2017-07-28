@@ -10,7 +10,7 @@ var secureMiddleware = secure.New(secure.Options{
 	FrameDeny:          true,
 	ContentTypeNosniff: true,
 	BrowserXssFilter:   true,
-	IsDevelopment:      false,
+	IsDevelopment:      true,
 })
 
 func InitRoutes() *mux.Router {
