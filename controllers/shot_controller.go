@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/alex1sz/shotcharter-go-api/models"
 	"github.com/alex1sz/shotcharter-go-api/utilities"
-	// "log"
 	"net/http"
 )
 

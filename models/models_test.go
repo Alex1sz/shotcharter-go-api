@@ -160,13 +160,13 @@ func TestRowExistWhenNoRow(t *testing.T) {
 	}
 }
 
-func TestShotUpdateForExistingShot(t *testing.T) {
+func TestShotUpdate(t *testing.T) {
 	shot := test_helper.CreateTestShot()
 	shot.PtValue, shot.Made, shot.XAxis, shot.YAxis = 3, false, 10, 55
 	err := shot.Update()
 
 	if err != nil {
-		t.Errorf("TestShotUpdateForExistingShot() failed. Update() returns err: %s", err.Error())
+		t.Errorf("TestShotUpdate() failed. Update() returns err: %s", err.Error())
 	}
 	// expect retrieved game HomeShots to contain shot
 	gamePostUpdate, err := models.FindGameByID(shot.Game.ID)
@@ -180,13 +180,35 @@ func TestShotUpdateForExistingShot(t *testing.T) {
 	}
 }
 
+// player tests begin
+func TestPlayerUpdate(t *testing.T) {
+	player := test_helper.CreateTestPlayer()
+	player.Name, player.JerseyNumber = "Donald Duck", 1
+
+	err := player.Update()
+
+	if err != nil {
+		t.Errorf("Expected player to update. Update() returns err: %s", err.Error())
+	}
+	// confirm player updated in db
+	updatedPlayer, err := models.FindPlayerByID(player.ID)
+
+	if err != nil {
+		t.Errorf("Expected FindPlayerByID to return player, got err: %s", err.Error())
+	}
+
+	if updatedPlayer.Name != player.Name {
+		t.Errorf("Expected updatedPlayer.Name to eq player.Name, got: %s", updatedPlayer.Name)
+	}
+}
+
 func TestPlayerIsValid(t *testing.T) {
 	player := models.Player{Name: "Dennis Rodman", Active: true, JerseyNumber: 99, Team: test_helper.CreateTestTeam()}
 
-	validBool, err := player.IsValid()
+	// validBool, err := player.IsValid()
 
-	if !validBool || err != nil {
-		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
+	if err := player.Create(); err != nil {
+		t.Errorf("expected player to be valid got err: %v", err.Error())
 	}
 }
 
@@ -197,10 +219,9 @@ func TestPlayerIsValidWhenInvalid(t *testing.T) {
 		JerseyNumber: 99,
 		Team:         models.Team{ID: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"},
 	}
-	validBool, err := player.IsValid()
 
-	if validBool {
-		t.Errorf("expected player to be valid got: %v, err: %v", validBool, err)
+	if err := player.Create(); err == nil {
+		t.Errorf("expected: err player is invalid', got: %v", player.ID)
 	}
 }
 

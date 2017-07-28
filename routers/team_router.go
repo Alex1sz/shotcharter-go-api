@@ -14,6 +14,7 @@ func SetTeamRoutes(router *mux.Router) *mux.Router {
 	router.PathPrefix("/teams").Handler(negroni.New(
 		negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext),
 		negroni.Wrap(teamRouter),
+		negroni.NewLogger(),
 	))
 	return router
 }
